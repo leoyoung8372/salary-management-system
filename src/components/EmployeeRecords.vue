@@ -1,5 +1,5 @@
 <template>
-    <div class="employee-records-container">
+    <div class="container">
         <div class="header">
             <h2 class="title">员工档案</h2>
         </div>
@@ -67,7 +67,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.employee-records-container {
+.container {
     height: 100vh;
     /* background-color: aqua; */
 }

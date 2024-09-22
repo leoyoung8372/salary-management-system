@@ -49,7 +49,7 @@
                     <input type="text" :value="calculateTax()" readonly class="input">  
                 </div>  
                 <div class="form-item">  
-                    <label class="label">总薪资</label>  
+                    <label class="label">实发薪资</label>  
                     <input type="number" v-model.number="totalPayroll" readonly class="input">  
                 </div>  
             </div>  
@@ -110,38 +110,49 @@ export default {
             this.totalPayroll = (totalIncome - taxAmount).toFixed(2);  
         },  
         async submitSalary() {  
-            const confirmed = confirm("请仔细核对，确定提交吗？");  
-            if (!confirmed) {  
-                return; // 用户选择取消  
-            }  
+    const confirmed = confirm("请仔细核对，确定提交吗？");  
+    if (!confirmed) {  
+        return; // 用户选择取消  
+    }  
 
-            try {  
-                const taxAmount = this.calculateTax();  
-                this.tax = taxAmount;  
-                const payload = {  
-                    employeeId: this.employeeId,  
-                    salaryDate: this.salaryDate,  
-                    baseSalary: this.baseSalary,  
-                    performanceSalary: this.performanceSalary,  
-                    allowance: this.allowance,  
-                    bonus: this.bonus,  
-                    deduction: this.deduction,  
-                    overtimePay: this.overtimePay,  
-                    tax: this.tax,  
-                    totalPayroll: this.totalPayroll  
-                };  
+    try {  
+        // 检查员工 ID 是否存在  
+        const existsResponse = await axios.get(`http://localhost:8080/api/employees/${this.employeeId}`);  
+        if (!existsResponse.data.exists) {  
+            alert("员工 ID 不存在，请检查后再试。");  
+            return; // 如果员工 ID 不存在，停止执行  
+        }  
 
-                console.log("即将发送的数据:", payload);  
-                const response = await axios.post('http://localhost:8080/api/salaries/salaries', payload);  
-                console.log("提交成功:", response.data);  
-                this.resetForm();  
-            } catch (error) {  
-                console.error("提交失败:", error);  
-                if (error.response) {  
-                    console.error("服务器返回的错误:", error.response.data);  
-                }  
-            }  
-        },  
+        const taxAmount = this.calculateTax();  
+        this.tax = taxAmount;  
+        const payload = {  
+            employeeId: this.employeeId,  
+            salaryDate: this.salaryDate,  
+            baseSalary: this.baseSalary,  
+            performanceSalary: this.performanceSalary,  
+            allowance: this.allowance,  
+            bonus: this.bonus,  
+            deduction: this.deduction,  
+            overtimePay: this.overtimePay,  
+            tax: this.tax,  
+            totalPayroll: this.totalPayroll  
+        };  
+
+        console.log("即将发送的数据:", payload);  
+        const response = await axios.post('http://localhost:8080/api/salaries/salaries', payload);  
+        console.log("提交成功:", response.data);  
+        this.resetForm();  
+    } catch (error) {  
+        console.error("提交失败:", error);  
+        if (error.response) {  
+            console.error("服务器返回的错误:", error.response.data);  
+            alert(`提交失败: ${error.response.data.message || error.response.data}`); // 提示用户具体错误信息  
+        } else {  
+            alert("提交失败: 网络错误或服务器未响应");  
+        }  
+    }  
+}, 
+        
         resetForm() {  
             this.salaryDate = '';  
             this.employeeId = '';  
