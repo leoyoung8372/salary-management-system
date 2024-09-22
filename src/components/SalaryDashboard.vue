@@ -41,13 +41,13 @@
 
 .header img {
     width: 98%;
-    height: 120px;
-    border-radius: 20px;
+    height: 100px;
+    border-radius: 15px;
 }
 
 .header h2 {
     position: absolute;
-    top: 30px;
+    top: 19px;
     /* 垂直居中 */
     left: 520px;
     /* 水平居中 */

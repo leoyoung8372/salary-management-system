@@ -7,6 +7,7 @@
             <router-link to="/salaryDashboard" class="navbarItem">薪资看板</router-link>
             <router-link to="/salaryDetails" class="navbarItem">工资明细</router-link>
             <router-link to="/salaryItems" class="navbarItem">薪资项</router-link>
+            <router-link to="/Payslip" class="navbarItem">工资条</router-link>
         </nav>
 
         <!-- 模态框 -->

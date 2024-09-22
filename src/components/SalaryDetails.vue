@@ -2,7 +2,7 @@
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">员工薪资查询</h1>
         <input v-model="employeeId" type="number" placeholder="请输入员工ID" class="border p-2 mb-4" />
-        <button @click="fetchSalaryDetails" class="bg-blue-500 text-white p-2 rounded">
+        <button @click="fetchSalaryDetails" class="bg-blue-500 text-white p-2 rounded" placeholder="请输入员工ID">
             查询薪资
         </button>
 
@@ -15,6 +15,7 @@
                 <li><strong>奖金:</strong> {{ salary.bonus }}</li>
                 <li><strong>加班费:</strong> {{ salary.overtimePay }}</li>
                 <li><strong>扣费:</strong>{{ salary.deduction }}</li>
+                <li><strong>薪资日期：{{ formatDate(salary.salaryDate) }}</strong></li>
             </ul>
             <h3 class="text-lg font-semibold mt-4">总薪资: {{ totalSalary }}</h3>
         </div>
@@ -61,6 +62,10 @@ export default {
                 console.error("Error fetching salary details:", error);
             }
         },
+        formatDate(dateString) {  
+            const date = new Date(dateString);  
+            return date.toLocaleDateString(); // 格式化为年月日  
+        } 
     },
 };  
 </script>

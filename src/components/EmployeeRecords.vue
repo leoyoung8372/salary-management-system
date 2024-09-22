@@ -71,13 +71,6 @@ export default {
     height: 100vh;
     /* background-color: aqua; */
 }
-.header{
-
-}
-.title{
-
-}
-
 .employee-table {
     width: 100%;
     border-collapse: collapse;
