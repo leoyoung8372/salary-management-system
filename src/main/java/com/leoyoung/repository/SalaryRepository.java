@@ -11,8 +11,8 @@ public interface SalaryRepository {
     List<Salary> getAllSalaries();
 
     //插入薪资记录
-    @Insert("INSERT INTO salaries(employee_id, base_salary, performance_salary, allowance, bonus,overtime_pay,deduction,salary_date,tax) " +
-            "VALUES(#{employeeId}, #{baseSalary}, #{performanceSalary}, #{allowance}, #{bonus}, #{overtimePay},#{deduction},#{salaryDate},#{tax})")
+    @Insert("INSERT INTO salaries(employee_id, base_salary, performance_salary, allowance, bonus,overtime_pay,deduction,salary_date,tax,total_payroll) " +
+            "VALUES(#{employeeId}, #{baseSalary}, #{performanceSalary}, #{allowance}, #{bonus}, #{overtimePay},#{deduction},#{salaryDate},#{tax},#{totalPayroll})")
     void insertSalary(Salary salary);
 
     //用于根据员工 ID 获取薪资详情

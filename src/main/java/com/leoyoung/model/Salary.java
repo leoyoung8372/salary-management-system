@@ -14,6 +14,7 @@ public class Salary {
     private BigDecimal deduction;
     private Date salaryDate;
     private BigDecimal tax;
+    private BigDecimal totalPayroll;
 
     // Getters and Setters
     public Integer getId() {
@@ -85,5 +86,12 @@ public class Salary {
     }
     public void setTax(BigDecimal tax) {
         this.tax = tax;
+    }
+
+    public BigDecimal getTotalPayroll() {
+        return totalPayroll;
+    }
+    public void setTotalPayroll(BigDecimal totalPayroll) {
+        this.totalPayroll = totalPayroll;
     }
 }
