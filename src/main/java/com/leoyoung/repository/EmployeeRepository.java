@@ -17,4 +17,8 @@ public interface EmployeeRepository {
     @Insert("INSERT INTO employees(name, department, position, employee_id, birth_date, hire_date, phone, status, id_card, gender, address) " +
             "VALUES(#{name}, #{department}, #{position}, #{employeeId}, #{birthDate}, #{hireDate}, #{phone}, #{status}, #{idCard}, #{gender}, #{address})")
     void insertEmployee(Employee employee);
+
+    @Select("SELECT COUNT(*) > 0 FROM employees WHERE employee_id = #{employeeId}")
+    boolean existsByEmployeeId(@Param("employeeId") String employeeId); // 修改为 String 类型
+
 }

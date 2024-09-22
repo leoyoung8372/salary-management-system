@@ -25,4 +25,8 @@ public class EmployeeService {
         // 调用 repository 方法插入新员工
         employeeRepository.insertEmployee(employee);
     }
+
+    public boolean existsById(String employeeId) {
+        return employeeRepository.existsByEmployeeId(employeeId); // 确保 repository 方法也能处理 String 类型
+    }
 }

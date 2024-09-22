@@ -6,6 +6,9 @@ import com.leoyoung.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 
 // 标记该类为 REST 控制器
 @RestController
@@ -29,5 +32,11 @@ public class EmployeeController {
     public void createEmployee(@RequestBody Employee employee) {
         // 调用服务层方法插入新员工
         employeeService.createEmployee(employee);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> checkEmployeeExists(@PathVariable String id) { // 修改为 String 类型
+        boolean exists = employeeService.existsById(id); // 确保服务层也能处理 String 类型
+        return ResponseEntity.ok().body(Map.of("exists", exists)); // 返回结果
     }
 }
