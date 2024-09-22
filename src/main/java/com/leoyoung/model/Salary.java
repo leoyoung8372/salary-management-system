@@ -1,16 +1,19 @@
 package com.leoyoung.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class Salary {
     private Integer id;
-    private Integer employeeId; // 外键
-    private BigDecimal baseSalary;
+    private String employeeId; // 外键
+    private BigDecimal baseSalary;  //表示任意精度的十进制数
     private BigDecimal performanceSalary;
     private BigDecimal allowance;
     private BigDecimal bonus;
     private BigDecimal overtimePay;
     private BigDecimal deduction;
+    private Date salaryDate;
+    private BigDecimal tax;
 
     // Getters and Setters
     public Integer getId() {
@@ -20,10 +23,11 @@ public class Salary {
         this.id = id;
     }
 
-    public Integer getEmployeeId() {
+    public String getEmployeeId() {
         return employeeId;
     }
-    public void setEmployeeId(Integer employeeId) {
+
+    public void setEmployeeId(String employeeId) {
         this.employeeId = employeeId;
     }
 
@@ -67,5 +71,19 @@ public class Salary {
     }
     public void setDeduction(BigDecimal deduction) {
         this.deduction = deduction;
+    }
+
+    public Date getSalaryDate() {
+        return salaryDate;
+    }
+    public void setSalaryDate(Date salaryDate) {
+        this.salaryDate = salaryDate;
+    }
+
+    public BigDecimal getTax() {
+        return tax;
+    }
+    public void setTax(BigDecimal tax) {
+        this.tax = tax;
     }
 }

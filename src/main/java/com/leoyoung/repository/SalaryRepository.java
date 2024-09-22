@@ -10,12 +10,13 @@ public interface SalaryRepository {
     @Select("SELECT * FROM salaries")
     List<Salary> getAllSalaries();
 
-    @Insert("INSERT INTO salaries(employee_id, base_salary, performance_salary, allowance, bonus,overtime_pay,deduction) " +
-            "VALUES(#{employeeId}, #{baseSalary}, #{performanceSalary}, #{allowance}, #{bonus}, #{overtimePay},#{deduction})")
+    //插入薪资记录
+    @Insert("INSERT INTO salaries(employee_id, base_salary, performance_salary, allowance, bonus,overtime_pay,deduction,salary_date,tax) " +
+            "VALUES(#{employeeId}, #{baseSalary}, #{performanceSalary}, #{allowance}, #{bonus}, #{overtimePay},#{deduction},#{salaryDate},#{tax})")
     void insertSalary(Salary salary);
 
     //用于根据员工 ID 获取薪资详情
-    @Select("SELECT base_salary , performance_salary, allowance, bonus, overtime_pay, deduction " +
+    @Select("SELECT base_salary , performance_salary, allowance, bonus, overtime_pay, deduction, salary_date " +
             "FROM salaries WHERE employee_id = #{employeeId}")
     Salary getSalaryDetailsByEmployeeId(Long employeeId);
 }

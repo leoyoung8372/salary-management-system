@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/api/salaries")
 public class SalaryController {
 
@@ -15,12 +16,14 @@ public class SalaryController {
     @Autowired
     private SalaryService salaryService;
 
+    // 获取所有薪资信息
     @GetMapping
     public List<Salary> getAllSalaries() {
         return salaryService.getAllSalaries();
     }
 
-    @PostMapping
+    // 创建新的薪资记录
+    @PostMapping("/salaries")
     public void createSalary(@RequestBody Salary salary) {
         salaryService.createSalary(salary);
     }
@@ -30,6 +33,4 @@ public class SalaryController {
     public Salary getSalaryDetailsByEmployeeId(@PathVariable Long employeeId) {
         return salaryService.getSalaryDetailsByEmployeeId(employeeId);
     }
-
-
 }
