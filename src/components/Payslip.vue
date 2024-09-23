@@ -119,7 +119,7 @@ export default {
 
                 const salaryExistsResponse = await axios.get(`http://localhost:8080/api/salaries/check?employeeId=${this.employeeId}&salaryDate=${this.salaryDate}`);  
                 if (salaryExistsResponse.data.exists) {  
-                    alert("该员工在此日期的工资记录已存在，请选择其他日期。");  
+                    alert("该员工在该月的工资记录已存在，请选择其他日期。");  
                     return;  
                 }  
 
