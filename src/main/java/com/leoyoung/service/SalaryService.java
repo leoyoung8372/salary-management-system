@@ -5,6 +5,7 @@ import com.leoyoung.repository.SalaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -30,6 +31,10 @@ public class SalaryService {
     }
 
     public boolean checkSalaryExists(String employeeId, String salaryDate) {
-        return salaryRepository.existsByEmployeeIdAndSalaryDate(employeeId, salaryDate);
+        // 解析日期字符串，获取年份和月份
+        LocalDate date = LocalDate.parse(salaryDate);
+        int year = date.getYear();
+        int month = date.getMonthValue();
+        return salaryRepository.existsByEmployeeIdAndYearAndMonth(employeeId, year, month);
     }
 }

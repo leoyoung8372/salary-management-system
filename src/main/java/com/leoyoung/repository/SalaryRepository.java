@@ -20,6 +20,6 @@ public interface SalaryRepository {
             "FROM salaries WHERE employee_id = #{employeeId}")
     Salary getSalaryDetailsByEmployeeId(String employeeId);
 
-    @Select("SELECT COUNT(*) > 0 FROM salaries WHERE employee_id = #{employeeId} AND salary_date = #{salaryDate}")
-    boolean existsByEmployeeIdAndSalaryDate(@Param("employeeId") String employeeId, @Param("salaryDate") String salaryDate);
+    @Select("SELECT COUNT(*) > 0 FROM salaries WHERE employee_id = #{employeeId} AND YEAR(salary_date) = #{year} AND MONTH(salary_date) = #{month}")
+    boolean existsByEmployeeIdAndYearAndMonth(@Param("employeeId") String employeeId, @Param("year") int year, @Param("month") int month);
 }
