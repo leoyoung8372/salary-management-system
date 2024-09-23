@@ -3,9 +3,12 @@ package com.leoyoung.controller;
 import com.leoyoung.model.Salary;
 import com.leoyoung.service.SalaryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -30,7 +33,15 @@ public class SalaryController {
 
     // 根据employeeId获取薪资详情
     @GetMapping("/{employeeId}")
-    public Salary getSalaryDetailsByEmployeeId(@PathVariable Long employeeId) {
+    public Salary getSalaryDetailsByEmployeeId(@PathVariable String employeeId) {
         return salaryService.getSalaryDetailsByEmployeeId(employeeId);
+    }
+
+    @GetMapping("/check")
+    public ResponseEntity<Map<String, Boolean>> checkSalaryExists(@RequestParam String employeeId, @RequestParam String salaryDate) {
+        boolean exists = salaryService.checkSalaryExists(employeeId, salaryDate);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", exists);
+        return ResponseEntity.ok(response);
     }
 }

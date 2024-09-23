@@ -25,7 +25,11 @@ public class SalaryService {
     }
 
     // 根据employeeId获取薪资详情
-    public Salary getSalaryDetailsByEmployeeId(Long employeeId) {
+    public Salary getSalaryDetailsByEmployeeId(String employeeId) {
         return salaryRepository.getSalaryDetailsByEmployeeId(employeeId);
+    }
+
+    public boolean checkSalaryExists(String employeeId, String salaryDate) {
+        return salaryRepository.existsByEmployeeIdAndSalaryDate(employeeId, salaryDate);
     }
 }
