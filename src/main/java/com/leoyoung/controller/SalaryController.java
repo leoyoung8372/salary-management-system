@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,11 +38,26 @@ public class SalaryController {
         return salaryService.getSalaryDetailsByEmployeeId(employeeId);
     }
 
+    //用于判断同一员工是否存在同年同月的薪资记录
     @GetMapping("/check")
     public ResponseEntity<Map<String, Boolean>> checkSalaryExists(@RequestParam String employeeId, @RequestParam String salaryDate) {
         boolean exists = salaryService.checkSalaryExists(employeeId, salaryDate);
         Map<String, Boolean> response = new HashMap<>();
         response.put("exists", exists);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/statistics")
+    public Map<String, BigDecimal> getSalaryStatistics() {
+        Map<String, BigDecimal> statistics = new HashMap<>();
+        statistics.put("totalBaseSalary", salaryService.getTotalBaseSalary());
+        statistics.put("totalPerformanceSalary", salaryService.getTotalPerformanceSalary());
+        statistics.put("totalAllowance", salaryService.getTotalAllowance());
+        statistics.put("totalBonus", salaryService.getTotalBonus());
+        statistics.put("totalDeduction", salaryService.getTotalDeduction());
+        statistics.put("totalOvertimePay", salaryService.getTotalOvertimePay());
+        statistics.put("totalTax", salaryService.getTotalTax());
+        statistics.put("totalPayroll", salaryService.getTotalPayroll());
+        return statistics;
     }
 }

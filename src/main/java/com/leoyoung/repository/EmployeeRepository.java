@@ -21,4 +21,8 @@ public interface EmployeeRepository {
     @Select("SELECT COUNT(*) > 0 FROM employees WHERE employee_id = #{employeeId}")
     boolean existsByEmployeeId(@Param("employeeId") String employeeId); // 修改为 String 类型
 
+    // 获取所有员工id和名字
+    @Select("SELECT employee_id, name FROM employees")
+    List<Employee> getAllEmployeeIdsAndNames();
+
 }

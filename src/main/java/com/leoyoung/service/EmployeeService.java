@@ -29,4 +29,10 @@ public class EmployeeService {
     public boolean existsById(String employeeId) {
         return employeeRepository.existsByEmployeeId(employeeId); // 确保 repository 方法也能处理 String 类型
     }
+
+    // 获取所有员工的工号和名字
+    public List<Employee> getAllEmployeeIdsAndNames() {
+        return employeeRepository.getAllEmployeeIdsAndNames();
+    }
+
 }

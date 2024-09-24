@@ -39,4 +39,10 @@ public class EmployeeController {
         boolean exists = employeeService.existsById(id); // 确保服务层也能处理 String 类型
         return ResponseEntity.ok().body(Map.of("exists", exists)); // 返回结果
     }
+
+    //  获取所有的员工ID和名字
+    @GetMapping("/employees")
+    public List<Employee> getAllEmployeeIdsAndNames() {
+        return employeeService.getAllEmployeeIdsAndNames();
+    }
 }
