@@ -5,9 +5,10 @@
             <router-link to="#" @click.prevent="showAddEmployeeModal">新增员工</router-link>
             <router-link to="/employeeRecords" class="navbarItem">员工档案</router-link>
             <router-link to="/salaryDashboard" class="navbarItem">薪资看板</router-link>
-            <router-link to="/salaryDetails" class="navbarItem">工资明细</router-link>
+            <router-link to="/salaryPaymentRecord" class="navbarItem">薪资发放记录</router-link>
             <router-link to="/salaryItems" class="navbarItem">薪资项</router-link>
             <router-link to="/Payslip" class="navbarItem">工资条</router-link>
+            
         </nav>
 
         <!-- 模态框 -->

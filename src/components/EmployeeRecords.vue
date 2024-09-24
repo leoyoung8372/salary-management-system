@@ -69,8 +69,8 @@ export default {
 <style lang="scss" scoped>
 .container {
     height: 100vh;
-    /* background-color: aqua; */
 }
+
 .employee-table {
     width: 100%;
     border-collapse: collapse;

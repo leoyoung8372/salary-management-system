@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import AddEmployee from "@/components/AddEmployee.vue";
 import EmployeeRecords from "@/components/EmployeeRecords.vue";
 import SalaryDashboard from "@/components/SalaryDashboard.vue";
-import SalaryDetails from "@/components/SalaryDetails.vue";
+import SalaryPaymentRecord from "@/components/SalaryPaymentRecord.vue";
 import SalaryItems from "@/components/SalaryItems.vue";
 import Payslip from "@/components/Payslip.vue"
 //创建路由器
@@ -28,8 +28,8 @@ const router = createRouter({
             component:SalaryDashboard
         },
         {
-            path:'/salaryDetails',
-            component:SalaryDetails
+            path:'/salaryPaymentRecord',
+            component:SalaryPaymentRecord
         },
         {
             path:'/salaryItems',
