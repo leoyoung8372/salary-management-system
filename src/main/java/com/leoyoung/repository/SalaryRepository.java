@@ -2,7 +2,6 @@ package com.leoyoung.repository;
 
 import com.leoyoung.model.Salary;
 import org.apache.ibatis.annotations.*;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -30,25 +29,21 @@ public interface SalaryRepository {
     // 获取各项薪资合计
     @Select("SELECT SUM(base_salary) FROM salaries")
     BigDecimal sumBaseSalary();
-
     @Select("SELECT SUM(performance_salary) FROM salaries")
     BigDecimal sumPerformanceSalary();
-
     @Select("SELECT SUM(allowance) FROM salaries")
     BigDecimal sumAllowance();
-
     @Select("SELECT SUM(bonus) FROM salaries")
     BigDecimal sumBonus();
-
     @Select("SELECT SUM(deduction) FROM salaries")
     BigDecimal sumDeduction();
-
     @Select("SELECT SUM(overtime_pay) FROM salaries")
     BigDecimal sumOvertimePay();
-
     @Select("SELECT SUM(tax) FROM salaries")
     BigDecimal sumTax();
-
     @Select("SELECT SUM(total_payroll) FROM salaries")
     BigDecimal sumTotalPayroll();
+
+
+    //
 }

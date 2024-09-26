@@ -58,6 +58,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope> <!-- 仅在测试时使用，不会打包到生产环境 -->
         </dependency>
+
+        <!--  itext PDF生成库      -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>8.0.0</version>
+
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
