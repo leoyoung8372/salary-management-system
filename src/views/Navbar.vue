@@ -3,12 +3,34 @@
         <!-- 导航栏 -->
         <nav class="navbar">
             <router-link to="#" @click.prevent="showAddEmployeeModal">新增员工</router-link>
-            <router-link to="/employeeRecords" class="navbarItem">员工档案</router-link>
-            <router-link to="/salaryDashboard" class="navbarItem">薪资看板</router-link>
-            <router-link to="/salaryPaymentRecord" class="navbarItem">薪资发放记录</router-link>
-            <router-link to="/salaryItems" class="navbarItem">薪资项</router-link>
-            <router-link to="/Payslip" class="navbarItem">工资条</router-link>
-            
+            <router-link to="/toDoList" class="navbarItem">
+                <img src="../../assets/backlog.png"class="icon" />
+                待办事项
+            </router-link>
+            <router-link to="/employeeRecords" class="navbarItem">
+                <img src="../../assets/EmployeeFile.png"class="icon" />
+                员工档案
+            </router-link>
+            <router-link to="/salaryDashboard" class="navbarItem">
+                <img src="../../assets/SalaryIcon.png"class="icon" />
+                薪资看板
+            </router-link>
+            <router-link to="/salaryPaymentRecord" class="navbarItem">
+                <img src="../../assets/record.png">
+                薪资发放记录
+            </router-link>
+            <router-link to="/salaryItems" class="navbarItem">
+                <img src="../../assets/salaryItem.png"class="icon" />
+                薪资项
+            </router-link>
+            <router-link to="/Payslip" class="navbarItem">
+                <img src="../../assets/salarypay.png"class="icon" />
+                工资条
+            </router-link>
+            <router-link to="/problemFeedback" class="navbarItem">
+                <img src="../../assets/feedback.png"class="icon" />
+                问题反馈
+            </router-link>
         </nav>
 
         <!-- 模态框 -->
@@ -46,23 +68,27 @@ export default {
 </script>
 
 <style>
-
 .navbar {
     width: 333px;
     height: 100%;
-    background-color: #aba6a6;
+    background-color: #d7d7d7;
+}
+
+.navbar img {
+    width: 25px;
 }
 
 .navbarItem {
     display: block;
     font-size: 22px;
     text-decoration: none;
+    border-radius: 6px 6px 6px 6px;
 }
 
 /* 让正在显示的路由高亮 */
 .router-link-active {
     /* 高亮背景色 */
-    background-color: #007bff;
+    background-color: #bfd2e6;
     /* 高亮文字颜色 */
     color: white;
 }

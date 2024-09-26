@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="header">
-            <h2>员工工资</h2>
+            <h2 style="font-weight: bolder;">员工工资</h2>
             <div class="underline">
                 <div class="highlight"></div>
             </div>
@@ -29,33 +29,33 @@
                 </div>
                 <div class="form-item">
                     <label class="label"><span class="required">*</span>基本工资</label>
-                    <input type="number" v-model.number="baseSalary" placeholder="输入基本工资" class="input" step="0.01"
-                        @input="calculateTotalPayroll">
+                    <input type="number" min="0" max="50000" v-model.number="baseSalary" placeholder="输入基本工资"
+                        class="input" step="0.01" @input="calculateTotalPayroll">
                 </div>
                 <div class="form-item">
                     <label class="label">绩效</label>
-                    <input type="number" v-model.number="performanceSalary" placeholder="输入绩效" class="input" step="0.01"
-                        @input="calculateTotalPayroll">
+                    <input type="number" min="0" max="50000" v-model.number="performanceSalary" placeholder="输入绩效"
+                        class="input" step="0.01" @input="calculateTotalPayroll">
                 </div>
                 <div class="form-item">
                     <label class="label">津贴</label>
-                    <input type="number" v-model.number="allowance" placeholder="输入津贴" class="input" step="0.01"
-                        @input="calculateTotalPayroll">
+                    <input type="number" min="0" max="50000" v-model.number="allowance" placeholder="输入津贴" class="input"
+                        step="0.01" @input="calculateTotalPayroll">
                 </div>
                 <div class="form-item">
                     <label class="label">奖金</label>
-                    <input type="number" v-model.number="bonus" placeholder="输入奖金" class="input" step="0.01"
-                        @input="calculateTotalPayroll">
+                    <input type="number" min="0" max="50000" v-model.number="bonus" placeholder="输入奖金" class="input"
+                        step="0.01" @input="calculateTotalPayroll">
                 </div>
                 <div class="form-item">
                     <label class="label">扣除</label>
-                    <input type="number" v-model.number="deduction" placeholder="输入扣除" class="input" step="0.01"
-                        @input="calculateTotalPayroll">
+                    <input type="number" min="0" max="50000" v-model.number="deduction" placeholder="输入扣除" class="input"
+                        step="0.01" @input="calculateTotalPayroll">
                 </div>
                 <div class="form-item">
                     <label class="label">加班费</label>
-                    <input type="number" v-model.number="overtimePay" placeholder="输入加班费" class="input" step="0.01"
-                        @input="calculateTotalPayroll">
+                    <input type="number" min="0" max="50000" v-model.number="overtimePay" placeholder="输入加班费"
+                        class="input" step="0.01" @input="calculateTotalPayroll">
                 </div>
                 <div class="form-item">
                     <label class="label">应交税额</label>
@@ -229,7 +229,7 @@ export default {
     padding: 1.5rem;
     padding-left: 5rem;
     /* 内边距 */
-    background-color: white;
+    background-color: #ffffff;
     /* 背景颜色 */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     /* 阴影效果 */
@@ -237,26 +237,23 @@ export default {
     /* 圆角 */
 }
 
-/* 表头样式 */
-.header {
-    margin-bottom: 1.5rem;
-}
-
 /* 下划线样式 */
 .underline {
-    border-bottom: 2px solid #C6F6D5;
+    border-bottom: 2px solid #c7f7d7;
     /* 绿色下划线 */
     margin-bottom: 1.5rem;
     /* 下边距 */
 }
 
 .highlight {
-    width: 25%;
+    width: 22%;
     /* 绿色高亮部分的宽度 */
-    height: 0.25rem;
+    height: 0.4rem;
     /* 高度 */
     background-color: #3b877f;
     /* 绿色 */
+    border-radius: 2px 22px 2px 22px;
+    margin-top: 2px;
 }
 
 .required {
@@ -287,6 +284,7 @@ export default {
 /* 标签样式 */
 .label {
     color: #4A5568;
+    font-weight: bold;
     margin-bottom: 0.25rem;
 }
 
@@ -310,11 +308,11 @@ export default {
 
 /* 输入框聚焦时的样式 */
 .input:focus {
-    border-color: #68D391;
+    border-color: #53b69c;
     /* 聚焦时边框颜色 */
     outline: none;
     /* 去掉默认轮廓 */
-    box-shadow: 0 0 0 1px rgba(104, 211, 145, 0.5);
+    /* box-shadow: 0 0 0 1px rgba(104, 211, 145, 0.5); */
     /* 聚焦时阴影效果 */
 }
 

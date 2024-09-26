@@ -7,6 +7,8 @@ import SalaryDashboard from "@/components/SalaryDashboard.vue";
 import SalaryPaymentRecord from "@/components/SalaryPaymentRecord.vue";
 import SalaryItems from "@/components/SalaryItems.vue";
 import Payslip from "@/components/Payslip.vue"
+import ToDoLIst from "@/components/ToDoLIst.vue";
+import ProblemFeedback from "@/components/ProblemFeedback.vue";
 //创建路由器
 const router = createRouter({
     history: createWebHistory(),
@@ -38,6 +40,14 @@ const router = createRouter({
         {
             path:'/payslip',
             component:Payslip
+        },
+        {
+            path:'/toDoLIst',
+            component:ToDoLIst
+        },
+        {
+            path:'/problemFeedback',
+            component:ProblemFeedback
         }
     ]
 })
