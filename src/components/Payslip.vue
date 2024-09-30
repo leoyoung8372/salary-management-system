@@ -82,7 +82,8 @@ export default {
     data() {
         return {
             employees: [], // 员工列表  
-            selectedEmployee: '', // 选中的员工ID  
+            name:'',
+            selectedEmployee: '', // 选中的员工ID 
             salaryDate: '', // 薪资归属日期  
             employeeId: '', // 工号  
             baseSalary: '', // 基本工资  
