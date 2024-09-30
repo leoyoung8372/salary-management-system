@@ -18,6 +18,7 @@ public interface EmployeeRepository {
             "VALUES(#{name}, #{department}, #{position}, #{employeeId}, #{birthDate}, #{hireDate}, #{phone}, #{status}, #{idCard}, #{gender}, #{address})")
     void insertEmployee(Employee employee);
 
+    //检查数据库中是否存在具有特定员工 ID 的记录，并返回一个布尔值表示结果。
     @Select("SELECT COUNT(*) > 0 FROM employees WHERE employee_id = #{employeeId}")
     boolean existsByEmployeeId(@Param("employeeId") String employeeId); // 修改为 String 类型
 

@@ -10,8 +10,8 @@ public class PayrollService {
     @Autowired
     private PayrollRepository payrollRepository;
 
-    // 获取工资单信息
-    public Payroll getPayroll(int employeeId) {
-        return payrollRepository.getPayrollByEmployeeId(employeeId);
+    //获取PDF文件，依据员工ID和薪资日期
+    public Payroll getPayrollByEmployeeIdAndDate(String employeeId, String salaryDate) {
+        return payrollRepository.getPayrollByEmployeeIdAndDate(employeeId, salaryDate);
     }
 }

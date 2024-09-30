@@ -34,6 +34,7 @@ public class EmployeeController {
         employeeService.createEmployee(employee);
     }
 
+    //检查员工ID是否存在
     @GetMapping("/{id}")
     public ResponseEntity<?> checkEmployeeExists(@PathVariable String id) { // 修改为 String 类型
         boolean exists = employeeService.existsById(id); // 确保服务层也能处理 String 类型

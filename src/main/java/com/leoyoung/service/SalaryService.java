@@ -1,10 +1,9 @@
 package com.leoyoung.service;
-
 import com.leoyoung.model.Salary;
 import com.leoyoung.repository.SalaryRepository;
+import com.leoyoung.model.EmployeeSalary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -46,35 +45,33 @@ public class SalaryService {
         }
     }
 
+    //获取所有salaries表中的记录，并根据salaries表中的employee_id，获取employees表中对应的employee_id的记录中的name
+    public List<EmployeeSalary> getAllSalaryRecords() {
+        return salaryRepository.getAllSalaryRecords();
+    }
+
     // 获取各项薪资合计
     public BigDecimal getTotalBaseSalary() {
         return salaryRepository.sumBaseSalary();
     }
-
     public BigDecimal getTotalPerformanceSalary() {
         return salaryRepository.sumPerformanceSalary();
     }
-
     public BigDecimal getTotalAllowance() {
         return salaryRepository.sumAllowance();
     }
-
     public BigDecimal getTotalBonus() {
         return salaryRepository.sumBonus();
     }
-
     public BigDecimal getTotalDeduction() {
         return salaryRepository.sumDeduction();
     }
-
     public BigDecimal getTotalOvertimePay() {
         return salaryRepository.sumOvertimePay();
     }
-
     public BigDecimal getTotalTax() {
         return salaryRepository.sumTax();
     }
-
     public BigDecimal getTotalPayroll() {
         return salaryRepository.sumTotalPayroll();
     }

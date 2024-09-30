@@ -1,5 +1,6 @@
 package com.leoyoung.controller;
 
+import com.leoyoung.model.EmployeeSalary;
 import com.leoyoung.model.Salary;
 import com.leoyoung.service.SalaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,13 @@ public class SalaryController {
         response.put("exists", exists);
         return ResponseEntity.ok(response);
     }
+    //获取所有的薪资记录和对应的员工名、手机号
+    @GetMapping("/records")
+    public List<EmployeeSalary> listAllSalaries() {
+        return salaryService.getAllSalaryRecords();
+    }
 
+    // 获取和返回公司薪资的各类统计信息
     @GetMapping("/statistics")
     public Map<String, BigDecimal> getSalaryStatistics() {
         Map<String, BigDecimal> statistics = new HashMap<>();

@@ -26,6 +26,7 @@ public class EmployeeService {
         employeeRepository.insertEmployee(employee);
     }
 
+    //检查数据库中是否存在具有特定员工 ID 的记录
     public boolean existsById(String employeeId) {
         return employeeRepository.existsByEmployeeId(employeeId); // 确保 repository 方法也能处理 String 类型
     }

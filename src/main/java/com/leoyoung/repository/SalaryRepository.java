@@ -1,5 +1,6 @@
 package com.leoyoung.repository;
 
+import com.leoyoung.model.EmployeeSalary;
 import com.leoyoung.model.Salary;
 import org.apache.ibatis.annotations.*;
 import java.math.BigDecimal;
@@ -21,6 +22,14 @@ public interface SalaryRepository {
     @Select("SELECT base_salary, performance_salary, allowance, bonus, overtime_pay, deduction, salary_date " +
             "FROM salaries WHERE employee_id = #{employeeId}")
     Salary getSalaryDetailsByEmployeeId(String employeeId);
+
+    //获取所有salaries表中的记录，并根据salaries表中的employee_id，获取employees表中对应的employee_id的记录中的name。
+    @Select("SELECT s.employee_id, e.name, e.phone,s.base_salary, s.performance_salary, s.allowance, " +
+            "s.bonus, s.deduction, s.overtime_pay, s.salary_date, s.tax, s.total_payroll " +
+            "FROM salaries s " +
+            "JOIN employees e ON s.employee_id = e.employee_id")
+    List<EmployeeSalary> getAllSalaryRecords();
+
 
     // 判断同一员工是否存在同年同月的薪资记录
     @Select("SELECT COUNT(*) > 0 FROM salaries WHERE employee_id = #{employeeId} AND YEAR(salary_date) = #{year} AND MONTH(salary_date) = #{month}")
@@ -45,5 +54,5 @@ public interface SalaryRepository {
     BigDecimal sumTotalPayroll();
 
 
-    //
+
 }

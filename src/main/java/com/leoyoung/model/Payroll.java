@@ -18,6 +18,7 @@ public class Payroll {
     private String salaryDate;          // 薪资日期
     private double tax;                 // 税金
     private double totalPayroll;        // 总薪资
+    private String employeeName;
 
     @Override
     public String toString() {
@@ -34,6 +35,7 @@ public class Payroll {
                 ", salaryDate='" + salaryDate + '\'' +
                 ", tax=" + tax +
                 ", totalPayroll=" + totalPayroll +
+                ", employeeName='" + employeeName + '\'' +
                 '}';
     }
 }
