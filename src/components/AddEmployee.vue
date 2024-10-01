@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="add-employee-container">
         <h2 class="title">添加新员工</h2>
         <form @submit.prevent="addEmployee" class="employee-form">
@@ -273,4 +273,10 @@ label {
 .cancel-button:hover {
     background-color: #aaa;
 }
-</style>
+</style> -->
+
+<template>
+    <div>
+        新增员工
+    </div>
+</template>
