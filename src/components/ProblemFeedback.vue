@@ -35,31 +35,50 @@ const downloadPayrollPdf = () => {
     axios({  
         method: 'get',  
         url: `http://localhost:8080/api/payroll/pdf?employeeId=${employeeId.value}&salaryDate=${salaryDate.value}`,  
-        responseType: 'blob'  
+        responseType: 'blob',  
+        validateStatus: function (status) {  
+            // 接受所有状态码，以便在 then 中处理  
+            return true;  
+        }  
     })  
     .then(response => {  
-        console.log('response.data:', response.data);  
+        if (response.status === 200) {  
+            // 成功响应，处理 PDF 下载  
+            const url = URL.createObjectURL(response.data);  
 
-        const url = URL.createObjectURL(response.data);  
-        console.log('url:', url);  
+            // 从响应头中获取文件名  
+            const contentDisposition = response.headers['content-disposition'];  
+            let fileName = 'payroll.pdf';  
+            if (contentDisposition) {  
+                const fileNameMatch = contentDisposition.match(/filename\*=UTF-8''(.+)|filename="(.+)"|filename=(.+)/);  
+                if (fileNameMatch) {  
+                    fileName = decodeURIComponent(fileNameMatch[1] || fileNameMatch[2] || fileNameMatch[3]);  
+                }  
+            }  
 
-        const link = document.createElement('a');  
-        link.href = url;  
-        link.setAttribute('download', 'payroll.pdf');  
-        console.log('link:', link);  
-
-        document.body.appendChild(link);  
-        link.click();  
-        document.body.removeChild(link);  
+            const link = document.createElement('a');  
+            link.href = url;  
+            link.setAttribute('download', fileName);  
+            document.body.appendChild(link);  
+            link.click();  
+            document.body.removeChild(link);  
+        } else if (response.status === 404) {  
+            // 处理 404 错误，提示用户  
+            alert('不存在该薪资记录。');  
+        } else {  
+            // 处理其他错误  
+            alert('下载 PDF 时发生错误。');  
+        }  
     })  
     .catch(error => {  
         console.error(error);  
+        alert('发生了网络错误或未知错误。');  
     });  
 };
 </script>  
 
 <style>  
-/* 样式定义 */  
+ 
 .flex {  
     display: flex;  
     align-items: center;  
