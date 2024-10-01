@@ -37,20 +37,17 @@
         <div v-if="isModalVisible" class="modal">
             <div class="modal-content">
                 <span class="close" @click="closeModal">&times;</span>
-                <AddEmployee @close="closeModal" /> <!-- 只在模态框中显示 AddEmployee -->
+                <!-- 只在模态框中显示 AddEmployee -->
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import AddEmployee from '@/components/AddEmployee.vue'; // 确保引入在这里  
 
 export default {
     name: 'Navbar',
-    components: {
-        AddEmployee // 注册 AddEmployee 组件  
-    },
+    
     data() {
         return {
             isModalVisible: false // 控制模态框的显示  

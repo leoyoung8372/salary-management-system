@@ -1,7 +1,6 @@
 //引入createRouter
 import { createRouter, createWebHistory } from "vue-router";
 //引入一个一个可能要呈现的组件
-import AddEmployee from "@/components/AddEmployee.vue";
 import EmployeeRecords from "@/components/EmployeeRecords.vue";
 import SalaryDashboard from "@/components/SalaryDashboard.vue";
 import SalaryPaymentRecord from "@/components/SalaryPaymentRecord.vue";
@@ -17,10 +16,7 @@ const router = createRouter({
             path: '/',  
             redirect: '/SalaryItems' // 添加默认路由 (默认显示) 
         }, 
-        {
-            path:'/addEmployee',
-            component: AddEmployee
-        },
+
         {
             path: '/employeeRecords',
             component: EmployeeRecords
