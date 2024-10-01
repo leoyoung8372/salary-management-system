@@ -25,7 +25,7 @@
             </router-link>
             <router-link to="/Payslip" class="navbarItem">
                 <img src="../../assets/salarypay.png"class="icon" />
-                工资条
+                工资发放
             </router-link>
             <router-link to="/problemFeedback" class="navbarItem">
                 <img src="../../assets/feedback.png"class="icon" />
