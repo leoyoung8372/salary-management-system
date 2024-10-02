@@ -3,6 +3,7 @@ package com.leoyoung.model;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Getter
 @Setter
 public class Employee {
@@ -14,7 +15,7 @@ public class Employee {
     private String hireDate;  // 使用 String 类型，方便 MyBatis 处理
     private String phone;
     private String employeeId;
-    private String status; // 新增字段
+    private String status;
     private String idCard;
     private String gender;
     private String address;

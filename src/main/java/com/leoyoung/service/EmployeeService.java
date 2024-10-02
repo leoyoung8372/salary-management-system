@@ -36,4 +36,9 @@ public class EmployeeService {
         return employeeRepository.getAllEmployeeIdsAndNames();
     }
 
+    //更新员工数据
+    public void updateEmployee(Employee employee) {
+        employeeRepository.updateEmployee(employee);
+    }
+
 }

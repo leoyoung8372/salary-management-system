@@ -26,4 +26,7 @@ public interface EmployeeRepository {
     @Select("SELECT employee_id, name FROM employees")
     List<Employee> getAllEmployeeIdsAndNames();
 
+    // 根据员工 ID 更新员工信息的 SQL 语句
+    @Update("UPDATE employees SET name=#{name}, department=#{department}, position=#{position}, birth_date=#{birthDate}, hire_date=#{hireDate}, phone=#{phone}, status=#{status}, id_card=#{idCard}, gender=#{gender}, address=#{address} WHERE employee_id=#{employeeId}")
+    void updateEmployee(Employee employee);
 }

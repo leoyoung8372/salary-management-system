@@ -41,9 +41,17 @@ public class EmployeeController {
         return ResponseEntity.ok().body(Map.of("exists", exists)); // 返回结果
     }
 
-    //  获取所有的员工ID和名字
+    //  获取所有的 员工ID 和 名字
     @GetMapping("/employees")
     public List<Employee> getAllEmployeeIdsAndNames() {
         return employeeService.getAllEmployeeIdsAndNames();
+    }
+
+    // 更新员工信息
+    @PutMapping("/{employeeId}")
+    public void updateEmployee(@PathVariable String employeeId, @RequestBody Employee employee) {
+        // 设置员工的 employeeId，以确保更新的是指定的员工
+        employee.setEmployeeId(employeeId);
+        employeeService.updateEmployee(employee);
     }
 }
