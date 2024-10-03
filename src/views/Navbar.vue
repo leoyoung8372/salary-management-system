@@ -7,13 +7,13 @@
                 <img src="../../assets/backlog.png"class="icon" />
                 待办事项
             </router-link>
-            <router-link to="/employeeRecords" class="navbarItem">
-                <img src="../../assets/EmployeeFile.png"class="icon" />
-                员工档案
-            </router-link>
             <router-link to="/salaryDashboard" class="navbarItem">
                 <img src="../../assets/SalaryIcon.png"class="icon" />
                 薪资看板
+            </router-link>
+            <router-link to="/employeeRecords" class="navbarItem">
+                <img src="../../assets/EmployeeFile.png"class="icon" />
+                员工档案
             </router-link>
             <router-link to="/salaryPaymentRecord" class="navbarItem">
                 <img src="../../assets/record.png">

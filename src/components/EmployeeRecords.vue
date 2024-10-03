@@ -2,14 +2,21 @@
     <div :class="['container', $attrs.class]">
         <!-- 标题 -->
         <div class="header">
-            <h2>员工管理系统</h2>
+            <h2>员工档案管理</h2>
         </div>
-        <!-- 新增员工按钮 -->
-        <button class="employee-button add" @click="showAddEmployeeModal = true">新增员工</button>
-        <button class="employee-button edit" @click="handleEditEmployee">修改员工</button>
-        <button class="employee-button delete">删除员工</button>
 
-        <!-- 新增员工对话框 -->
+        <div class="tools">
+            <!-- 新增员工按钮 -->
+            <button class="employee-button add" @click="showAddEmployeeModal = true">新增员工</button>
+            <button class="employee-button edit" @click="handleEditEmployee">修改员工</button>
+            <button class="employee-button delete" @click="deleteEmployee">删除员工</button>
+            <!-- 搜索框 -->
+            <input class="searchBox" type="search" placeholder="请输入搜索内容..." v-model="searchQuery" />
+            <!-- 搜索按钮 -->
+            <button @click="searchEmployees" class="searchBotton">搜索</button>
+        </div>
+
+        <!-- 新增员工模态框 -->
         <div v-if="showAddEmployeeModal" class="modal-overlay">
             <div class="modal-content">
                 <div class="add-employee-container">
@@ -74,6 +81,7 @@
                         <!-- 工号输入框 -->
                         <div class="form-group">
                             <label for="employeeId">工号:</label>
+                            <span style="color: gray; font-size: small; font-weight: 100;">格式示例：SAL-001</span>
                             <input type="text" v-model="employee.employeeId" required class="form-input"
                                 @blur="checkEmployeeExists" />
                             <!-- 工号存在性提示 -->
@@ -93,7 +101,7 @@
                         <!-- 联系电话输入框 -->
                         <div class="form-group">
                             <label for="phone">联系电话:</label>
-                            <input type="text" v-model="employee.phone" required class="form-input" />
+                            <input type="number" v-model="employee.phone" required class="form-input" />
                         </div>
                         <!-- 员工状态选择 -->
                         <div class="form-group">
@@ -115,44 +123,44 @@
         </div>
 
         <!-- 员工列表表格 -->
-        <table class="employee-table">
-            <thead>
-                <tr>
-                    <th>姓名</th>
-                    <th>身份证号</th>
-                    <th>性别</th>
-                    <th>身份证地址</th>
-                    <th>部门</th>
-                    <th>岗位</th>
-                    <th>工号</th>
-                    <th>出生日期</th>
-                    <th>入职日期</th>
-                    <th>联系电话</th>
-                    <th>状态</th>
-                    <th>选择</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- 迭代显示员工信息 -->
-                <tr v-for="employee in employees" :key="employee.employeeId">
-                    <td>{{ employee.name }}</td>
-                    <td>{{ employee.idCard }}</td>
-                    <td>{{ employee.gender }}</td>
-                    <td>{{ truncateText(employee.address, 12) }}</td>
-                    <td>{{ employee.department }}</td>
-                    <td>{{ employee.position }}</td>
-                    <td>{{ employee.employeeId }}</td>
-                    <td>{{ employee.birthDate }}</td>
-                    <td>{{ employee.hireDate }}</td>
-                    <td>{{ employee.phone }}</td>
-                    <td>{{ employee.status }}</td>
-                    <td style="text-align: center;">
-                        <!-- 选择员工的复选框 -->
-                        <input type="checkbox" :checked="employee.checked" @change="toggleEmployeeSelection(employee)"
-                            style="accent-color: #ff0000; transform: scale(1.5);" />
-                    </td>
-                </tr>
-            </tbody>
+        <table class="employee-table animate-in">  
+            <thead>  
+                <tr>  
+                    <th>姓名</th>  
+                    <th>身份证号</th>  
+                    <th>性别</th>  
+                    <th>身份证地址</th>  
+                    <th>部门</th>  
+                    <th>岗位</th>  
+                    <th>工号</th>  
+                    <th>出生日期</th>  
+                    <th>入职日期</th>  
+                    <th>联系电话</th>  
+                    <th>状态</th>  
+                    <th>选择</th>  
+                </tr>  
+            </thead>  
+            <tbody>  
+                <!-- 迭代显示员工信息 -->  
+                <tr v-for="employee in filteredEmployees" :key="employee.employeeId">  
+                    <td>{{ employee.name }}</td>  
+                    <td>{{ employee.idCard }}</td>  
+                    <td>{{ employee.gender }}</td>  
+                    <td>{{ truncateText(employee.address, 12) }}</td>  
+                    <td>{{ employee.department }}</td>  
+                    <td>{{ employee.position }}</td>  
+                    <td>{{ employee.employeeId }}</td>  
+                    <td>{{ employee.birthDate }}</td>  
+                    <td>{{ employee.hireDate }}</td>  
+                    <td>{{ employee.phone }}</td>  
+                    <td>{{ employee.status }}</td>  
+                    <td style="text-align: center;">  
+                        <!-- 选择员工的复选框 -->  
+                        <input type="checkbox" :checked="employee.checked" @change="toggleEmployeeSelection(employee)"  
+                            style="accent-color: #ff0000; transform: scale(1.5);" />  
+                    </td>  
+                </tr>  
+            </tbody>  
         </table>
     </div>
 
@@ -163,44 +171,49 @@
                 <h2 style="padding-bottom: 16px;">编辑员工信息</h2>
                 <form class="employee-form" @submit.prevent="updateEmployee">
                     <div v-for="(value, key) in editingEmployee" :key="key" class="form-group">
-                        <!-- address 字段 被排除-->  
-                    <template v-if="key !== 'address'">  
-                        <label :for="key">{{ getFieldLabel(key) }}:</label>  
+                        <!-- address 字段 被排除-->
+                        <template v-if="key !== 'address'">
+                            <label :for="key">
+                                <!-- 检查是否为工号字段 -->
+                                <span v-if="key === 'employeeId'"><span style="color: red;">*</span>确认工号:<span
+                                        style="color: gray; font-weight: 100;font-size: small;">错误的工号会导致更新失败</span></span>
+                                <span v-else>{{ getFieldLabel(key) }}:</span>
+                            </label>
 
-                        <template  
-                            v-if="key !== 'department' && key !== 'position' && key !== 'gender' && key !== 'status'">  
-                            <input :type="getInputType(key)" v-model="editingEmployee[key]" :id="key"  
-                                class="form-input" />  
-                        </template>  
+                            <template
+                                v-if="key !== 'department' && key !== 'position' && key !== 'gender' && key !== 'status'">
+                                <input :type="getInputType(key)" v-model="editingEmployee[key]" :id="key"
+                                    class="form-input" />
+                            </template>
 
-                        <template v-else-if="key === 'gender'">  
-                            <select v-model="editingEmployee[key]" :id="key" class="form-input">  
-                                <option value="男">男</option>  
-                                <option value="女">女</option>  
-                            </select>  
-                        </template>  
+                            <template v-else-if="key === 'gender'">
+                                <select v-model="editingEmployee[key]" :id="key" class="form-input">
+                                    <option value="男">男</option>
+                                    <option value="女">女</option>
+                                </select>
+                            </template>
 
-                        <template v-else-if="key === 'department'">  
-                            <select v-model="editingEmployee[key]" :id="key" class="form-input"  
-                                @change="updatePositions(editingEmployee[key], editingEmployee)">  
-                                <option v-for="dept in departments" :key="dept" :value="dept">{{ dept }}</option>  
-                            </select>  
-                        </template>  
+                            <template v-else-if="key === 'department'">
+                                <select v-model="editingEmployee[key]" :id="key" class="form-input"
+                                    @change="updatePositions(editingEmployee[key], editingEmployee)">
+                                    <option v-for="dept in departments" :key="dept" :value="dept">{{ dept }}</option>
+                                </select>
+                            </template>
 
-                        <template v-else-if="key === 'position'">  
-                            <select v-model="editingEmployee[key]" :id="key" class="form-input">  
-                                <option v-for="pos in positions" :key="pos" :value="pos">{{ pos }}</option>  
-                            </select>  
-                        </template>  
+                            <template v-else-if="key === 'position'">
+                                <select v-model="editingEmployee[key]" :id="key" class="form-input">
+                                    <option v-for="pos in positions" :key="pos" :value="pos">{{ pos }}</option>
+                                </select>
+                            </template>
 
-                        <template v-else-if="key === 'status'">  
-                            <select v-model="editingEmployee[key]" :id="key" class="form-input">  
-                                <option value="正式工">正式工</option>  
-                                <option value="试用期">试用期</option>  
-                                <option value="临时工">临时工</option>  
-                            </select>  
-                        </template>  
-                    </template>
+                            <template v-else-if="key === 'status'">
+                                <select v-model="editingEmployee[key]" :id="key" class="form-input">
+                                    <option value="正式工">正式工</option>
+                                    <option value="试用期">试用期</option>
+                                    <option value="临时工">临时工</option>
+                                </select>
+                            </template>
+                        </template>
                     </div>
                     <div class="button-group">
                         <button type="submit" class="submit-button">保存修改</button>
@@ -213,12 +226,16 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import axios from 'axios';
 import { regionData } from 'element-china-area-data';
 
 // 员工列表
-const employees = ref([]);
+
+const employees = ref([]);  
+const searchQuery = ref('');  
+const filteredEmployees = ref([]);
+
 
 // 控制"新增员工"对话框的显示
 const showAddEmployeeModal = ref(false);
@@ -274,18 +291,22 @@ const selectedEmployee = ref(null);
 //创建一个新的 ref 来存储当前选中的员工信息
 const selectedEmployeeInfo = ref(null);
 
+//控制编辑员工模态框的显示状态
 const showEditEmployeeModal = ref(false);
+
+// 存储当前正在编辑的员工信息，初始值为null
 const editingEmployee = ref(null);
 
-const departments = [
-    '销售部', '产品部', '研发部', '生产部', '行政部', '人事部', '市场部', '采购部'
-];
+// 包含多个部门名称的数组
+const departments = ['销售部', '产品部', '研发部', '生产部', '行政部', '人事部', '市场部', '采购部'];
 
+//关闭编辑员工的模态框，将showEditEmployeeModal的值设为false并重置editingEmployee为null
 const closeEditEmployeeModal = () => {
     showEditEmployeeModal.value = false;
     editingEmployee.value = null;
 };
 
+//根据输入的键返回对应的字段标签，如果键在预定义的标签中不存在，则返回键本身。
 const getFieldLabel = (key) => {
     const labels = {
         name: '姓名',
@@ -303,6 +324,7 @@ const getFieldLabel = (key) => {
     return labels[key] || key;
 };
 
+//根据输入的键返回特定的输入类型。
 const getInputType = (key) => {
     if (key === 'birthDate' || key === 'hireDate') {
         return 'date';
@@ -333,32 +355,51 @@ const updateEmployee = async () => {
     }
 };
 
-//判断是否选择员工，再弹出模态框
+//判断是否选择了员工，再弹出模态框
 const handleEditEmployee = () => {
     if (selectedEmployeeInfo.value) {
         editingEmployee.value = { ...selectedEmployeeInfo.value };
-        // 显示编辑员工的模态窗口
+        // 显示编辑员工的模态窗口  
         showEditEmployeeModal.value = true;
         // 初始化岗位列表  
-        updatePositions(editingEmployee.value.department);
+        // 先检查 editingEmployee.value.department 是否存在,如果存在则调用 updatePositions 函数  
+        if (editingEmployee.value.department) {
+            updatePositions(editingEmployee.value.department, editingEmployee.value);
+        } else {
+            console.error('editingEmployee.department is undefined');
+        }
     } else {
         alert('请先选择要修改的员工');
     }
 };
-
+// 搜索员工的函数  
+const searchEmployees = () => {  
+    if (searchQuery.value.trim() === '') {  
+        // 如果搜索框为空，显示所有员工  
+        filteredEmployees.value = employees.value;  
+    } else {  
+        // 根据输入的字符过滤员工  
+        filteredEmployees.value = employees.value.filter(employee => {  
+            return Object.values(employee).some(value =>   
+                String(value).includes(searchQuery.value)  
+            );  
+        });  
+    }  
+}; 
 // 获取员工数据
-const fetchEmployees = async () => {
-    try {
-        const response = await axios.get('http://localhost:8080/api/employees');
-        employees.value = response.data.map((employee) => ({
-            ...employee,
-            checked: false,
-        }));
-    } catch (error) {
-        console.error('获取员工数据失败:', error);
-        alert('获取员工数据失败，请检查后重试。');
-    }
-};
+const fetchEmployees = async () => {  
+    try {  
+        const response = await axios.get('http://localhost:8080/api/employees');  
+        employees.value = response.data.map((employee) => ({  
+            ...employee,  
+            checked: false,  
+        }));  
+        filteredEmployees.value = employees.value; // 默认显示所有员工  
+    } catch (error) {  
+        console.error('获取员工数据失败:', error);  
+        alert('获取员工数据失败，请检查后重试。');  
+    }  
+}; 
 
 // 关闭"新增员工"对话框并重置表单
 const closeAddEmployeeModal = () => {
@@ -368,10 +409,10 @@ const closeAddEmployeeModal = () => {
 
 // 文本截取方法，用于显示限定长度的文本
 const truncateText = (text, length) => {
-    if (text.length <= length) {
-        return text;
+    if (!text || typeof text !== 'string') {
+        return ''; // 或者返回一个默认值  
     }
-    return text.slice(0, length) + '...';
+    return text.length <= length ? text : text.slice(0, length) + '...';
 };
 
 // 重置新员工表单
@@ -439,38 +480,43 @@ const checkEmployeeExists = async () => {
 };
 
 // 根据部门更新岗位列表并设置工号前缀
-
 const updatePositions = (department, employeeObject) => {
-    switch (department) {
-        case '销售部':
-            positions.value = ['销售经理', '销售代表', '客户经理'];
-            break;
-        case '产品部':
-            positions.value = ['产品总监', '产品经理', '产品专员'];
-            break;
-        case '研发部':
-            positions.value = ['研发总监', '项目经理', '技术总监'];
-            break;
-        case '生产部':
-            positions.value = ['生产经理', '生产线长', '生产工人'];
-            break;
-        case '行政部':
-            positions.value = ['行政经理', '行政助理', '前台接待'];
-            break;
-        case '人事部':
-            positions.value = ['人事经理', '招聘专员', '培训专员'];
-            break;
-        case '市场部':
-            positions.value = ['市场经理', '市场专员', '品牌经理'];
-            break;
-        case '采购部':
-            positions.value = ['采购经理', '采购助理', '采购专员'];
-            break;
-        default:
-            positions.value = [];
+    if (department && employeeObject) {
+        switch (department) {
+            case '销售部':
+                positions.value = ['销售经理', '销售代表', '客户经理'];
+                break;
+            case '产品部':
+                positions.value = ['产品总监', '产品经理', '产品专员'];
+                break;
+            case '研发部':
+                positions.value = ['研发总监', '项目经理', '技术总监'];
+                break;
+            case '生产部':
+                positions.value = ['生产经理', '生产线长', '生产工人'];
+                break;
+            case '行政部':
+                positions.value = ['行政经理', '行政助理', '前台接待'];
+                break;
+            case '人事部':
+                positions.value = ['人事经理', '招聘专员', '培训专员'];
+                break;
+            case '市场部':
+                positions.value = ['市场经理', '市场专员', '品牌经理'];
+                break;
+            case '采购部':
+                positions.value = ['采购经理', '采购助理', '采购专员'];
+                break;
+            default:
+                positions.value = [];
+        }
+        // 设置对应的工号前缀  
+        employeeObject.employeeId = departmentPrefixes[department] || '';
+        // 设置对应的工号前缀  
+        employeeObject.employeeId = departmentPrefixes[department] || '';
+    } else {
+        console.error('department or employeeObject is undefined');
     }
-    // 设置对应的工号前缀  
-    employeeObject.employeeId = departmentPrefixes[department] || '';
 };
 
 
@@ -521,16 +567,37 @@ const toggleEmployeeSelection = (employee) => {
     }
 };
 
-// 发送选中的员工信息到后端的函数  
-const sendSelectedEmployeeToBackend = async (employeeInfo) => {
+//删除员工
+const deleteEmployee = async () => {
     try {
-        // 注意：这里的URL应该替换实际的后端API地址  
-        const response = await axios.post('http://your-backend-api-url/selected-employee', employeeInfo);
-        console.log('选中的员工信息已成功发送到后端:', response.data);
+        if (selectedEmployeeInfo.value) {
+            // 发送 DELETE 请求到后端API删除员工  
+            await axios.delete(`http://localhost:8080/api/employees/${selectedEmployeeInfo.value.employeeId}`);
+            alert('员工信息删除成功!');
+            // 从员工列表中移除已删除的员工  
+            employees.value = employees.value.filter(employee => employee.employeeId !== selectedEmployeeInfo.value.employeeId);
+            // 清空选中的员工信息  
+            selectedEmployeeInfo.value = null;
+        } else {
+            alert('请先选择要删除的员工');
+        }
     } catch (error) {
-        console.error('发送选中员工信息到后端失败:娃哈哈', error);
+        console.error('删除员工信息失败:', error);
+        alert('删除员工信息失败,存在薪资记录，尝试');
     }
 };
+
+
+// // 发送选中的员工信息到后端的函数  
+// const sendSelectedEmployeeToBackend = async (employeeInfo) => {
+//     try {
+//         // 注意：这里的URL应该替换实际的后端API地址  
+//         const response = await axios.post('http://your-backend-api-url/selected-employee', employeeInfo);
+//         console.log('选中的员工信息已成功发送到后端:娃哈哈', response.data);
+//     } catch (error) {
+//         console.error('发送选中员工信息到后端失败:娃哈哈', error);
+//     }
+// };
 
 // 初始化时获取员工数据
 onMounted(async () => {
@@ -543,6 +610,22 @@ onMounted(async () => {
 /* 容器样式 */
 .container {
     padding: 20px;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.employee-table {
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 /* 标题样式 */
@@ -568,15 +651,57 @@ onMounted(async () => {
     margin-right: 10px;
 }
 
+/* 搜索框 */
+.tools .searchBox {  
+    background-image: url('../../assets/搜索.png');  
+    background-size: 20px 20px;  
+    background-repeat: no-repeat;  
+    background-position: 2% 50%;  
+    width: 300px;  
+    height: 35px;  
+    border-radius: 8px;  
+    border: #d7d1d1 1px solid;  
+    padding-left: 30px;  
+    transition: border-color 0.3s; /* 添加过渡效果 */
+    margin-left: 636px;  
+}  
+/* 悬停时的边框颜色 */  
+.tools .searchBox:hover {  
+    border: 2px solid #67a99d; /* 悬停时的边框颜色 */  
+}  
+/* 聚焦时的边框颜色 */  
+.tools .searchBox:focus {  
+    outline: none; /* 去掉默认的聚焦轮廓 */  
+    border-color: gray; /* 聚焦时的边框颜色 */  
+}  
+/* 当鼠标悬停并且输入框获得焦点时，边框颜色保持绿色 */  
+.tools .searchBox:hover:focus {  
+    border-color: #67a99d; /* 悬停并聚焦时的边框颜色 */  
+}
+/* 搜索按钮 */
+.tools .searchBotton{
+    width: 69px;
+    height: 35px;
+    margin-left: 10px;
+    border-radius: 5px;
+    background-color: rgb(230, 230, 230);
+    border: 1px solid gray;
+}
+.tools .searchBotton:hover{
+    border:1.4px solid #218838;
+    background-color: rgb(222, 222, 222);
+}
+.tools .searchBotton:active{
+    background-color: #e9e9ea;
+}
+
 /* 按钮的默认背景颜色 */
 .employee-button.add {
     background-color: #28a745;
 }
-
 .employee-button.edit {
     background-color: #5183e6;
 }
-
 .employee-button.delete {
     background-color: #e03122;
 }
@@ -585,15 +710,12 @@ onMounted(async () => {
 .employee-button.add:hover {
     background-color: #218838;
 }
-
 .employee-button.edit:hover {
     background-color: #3a6fb0;
 }
-
 .employee-button.delete:hover {
     background-color: #c0271a;
 }
-
 
 /* 表格样式 */
 .employee-table {

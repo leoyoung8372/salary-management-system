@@ -22,7 +22,7 @@
                 <!-- 薪资日期输入框 -->
                 <div class="rubric">
                     <label for="salaryDate">薪资日期：</label>
-                    <input id="salaryDate" v-model="salaryDate" type="text" class="border rounded px-2 py-1 mr-4" />
+                    <input id="salaryDate" v-model="salaryDate" type="text" placeholder="YYYY-MM-DD" class="border rounded px-2 py-1 mr-4" />
                 </div>
 
                 <!-- 清空输入内容按钮 -->
