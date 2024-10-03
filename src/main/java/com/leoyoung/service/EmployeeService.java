@@ -41,4 +41,9 @@ public class EmployeeService {
         employeeRepository.updateEmployee(employee);
     }
 
+    //删除员工
+    public void deleteByEmployeeId(String employeeId) {
+        employeeRepository.deleteByEmployeeId(employeeId);
+    }
+
 }

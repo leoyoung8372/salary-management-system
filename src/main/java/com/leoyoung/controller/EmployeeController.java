@@ -4,6 +4,7 @@ package com.leoyoung.controller;
 import com.leoyoung.model.Employee;
 import com.leoyoung.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
@@ -53,5 +54,16 @@ public class EmployeeController {
         // 设置员工的 employeeId，以确保更新的是指定的员工
         employee.setEmployeeId(employeeId);
         employeeService.updateEmployee(employee);
+    }
+
+    // 根据员工ID删除员工信息
+    @DeleteMapping("/{employeeId}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable String employeeId) {
+        try {
+            employeeService.deleteByEmployeeId(employeeId);
+            return ResponseEntity.ok("员工信息删除成功!");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("删除员工信息失败: " + e.getMessage());
+        }
     }
 }
