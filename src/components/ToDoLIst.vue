@@ -1,44 +1,42 @@
 <template>  
-    <div>  
-      <input v-model="employeeId" type="text" placeholder="请输入员工ID" />  
-      <button @click="generatePayrollPdf">生成工资单PDF</button>  
+  <div class="demo-date-picker">  
+    <div class="block">  
+      <!-- 日期选择器组件 -->  
+      <el-date-picker  v-model="value1" type="date" placeholder="Pick a day" size="large"/>  
     </div>  
-  </template>  
-  
-  <script>  
-  import axios from 'axios';  
-  
-  export default {  
-    data() {  
-      return {  
-        employeeId: null, // 初始化员工ID  
-      };  
-    },  
-    methods: {  
-      async generatePayrollPdf() {  
-        if (!this.employeeId) {  
-          alert('请先输入员工ID');  
-          return;  
-        }  
-        
-        // 使用用户输入的员工ID  
-        const response = await axios.get(`http://localhost:8080/api/payroll/${this.employeeId}`);  
-        const payroll = response.data;  
-  
-        // 调用后端生成PDF的API  
-        const pdfResponse = await axios.post('http://localhost:8080/api/payroll/generate-pdf', payroll, {  
-          responseType: 'blob'  
-        });  
-  
-        // 创建下载链接  
-        const url = window.URL.createObjectURL(new Blob([pdfResponse.data]));  
-        const link = document.createElement('a');  
-        link.href = url;  
-        link.setAttribute('download', 'payroll.pdf');  
-        document.body.appendChild(link);  
-        link.click();  
-        console.log(payroll);  
-      }  
-    }  
-  }  
-  </script>
+  </div>  
+</template>  
+
+<script setup>  
+import { ref } from 'vue'  
+
+// 定义响应式变量，用于存储选择的日期  
+const value1 = ref('')  
+</script>  
+
+<style scoped>  
+.demo-date-picker {  
+  display: flex;  /* 使用flex布局 */  
+  width: 100%;    /* 容器宽度为100% */  
+  padding: 0;     /* 去除内边距 */  
+  flex-wrap: wrap; /* 允许换行 */  
+}  
+
+.demo-date-picker .block {  
+  padding: 30px 0; /* 设置上下内边距 */  
+  text-align: center; /* 文本居中对齐 */  
+  border-right: solid 1px var(--el-border-color); /* 右边框 */  
+  flex: 1; /* 使每个块均匀分配空间 */  
+}  
+
+.demo-date-picker .block:last-child {  
+  border-right: none; /* 去除最后一个块的右边框 */  
+}  
+
+.demo-date-picker .demonstration {  
+  display: block; /* 作为块元素显示 */  
+  color: var(--el-text-color-secondary); /* 设置文本颜色 */  
+  font-size: 14px; /* 设置字体大小 */  
+  margin-bottom: 20px; /* 设置底部外边距 */  
+}  
+</style>

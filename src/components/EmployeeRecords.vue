@@ -90,7 +90,7 @@
                         </div>
                         <!-- 出生日期输入框 -->
                         <div class="form-group">
-                            <label for="birthDate">出生日期:</label>
+                            <label for="birthDate">出生日期:</label><br>
                             <input type="date" v-model="employee.birthDate" required class="form-input" />
                         </div>
                         <!-- 入职日期输入框 -->
@@ -123,44 +123,44 @@
         </div>
 
         <!-- 员工列表表格 -->
-        <table class="employee-table animate-in">  
-            <thead>  
-                <tr>  
-                    <th>姓名</th>  
-                    <th>身份证号</th>  
-                    <th>性别</th>  
-                    <th>身份证地址</th>  
-                    <th>部门</th>  
-                    <th>岗位</th>  
-                    <th>工号</th>  
-                    <th>出生日期</th>  
-                    <th>入职日期</th>  
-                    <th>联系电话</th>  
-                    <th>状态</th>  
-                    <th>选择</th>  
-                </tr>  
-            </thead>  
-            <tbody>  
-                <!-- 迭代显示员工信息 -->  
-                <tr v-for="employee in filteredEmployees" :key="employee.employeeId">  
-                    <td>{{ employee.name }}</td>  
-                    <td>{{ employee.idCard }}</td>  
-                    <td>{{ employee.gender }}</td>  
-                    <td>{{ truncateText(employee.address, 12) }}</td>  
-                    <td>{{ employee.department }}</td>  
-                    <td>{{ employee.position }}</td>  
-                    <td>{{ employee.employeeId }}</td>  
-                    <td>{{ employee.birthDate }}</td>  
-                    <td>{{ employee.hireDate }}</td>  
-                    <td>{{ employee.phone }}</td>  
-                    <td>{{ employee.status }}</td>  
-                    <td style="text-align: center;">  
-                        <!-- 选择员工的复选框 -->  
-                        <input type="checkbox" :checked="employee.checked" @change="toggleEmployeeSelection(employee)"  
-                            style="accent-color: #ff0000; transform: scale(1.5);" />  
-                    </td>  
-                </tr>  
-            </tbody>  
+        <table class="employee-table animate-in">
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>身份证号</th>
+                    <th>性别</th>
+                    <th>身份证地址</th>
+                    <th>部门</th>
+                    <th>岗位</th>
+                    <th>工号</th>
+                    <th>出生日期</th>
+                    <th>入职日期</th>
+                    <th>联系电话</th>
+                    <th>状态</th>
+                    <th>选择</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 迭代显示员工信息 -->
+                <tr v-for="employee in filteredEmployees" :key="employee.employeeId">
+                    <td>{{ employee.name }}</td>
+                    <td>{{ employee.idCard }}</td>
+                    <td>{{ employee.gender }}</td>
+                    <td>{{ truncateText(employee.address, 12) }}</td>
+                    <td>{{ employee.department }}</td>
+                    <td>{{ employee.position }}</td>
+                    <td>{{ employee.employeeId }}</td>
+                    <td>{{ employee.birthDate }}</td>
+                    <td>{{ employee.hireDate }}</td>
+                    <td>{{ employee.phone }}</td>
+                    <td>{{ employee.status }}</td>
+                    <td style="text-align: center;">
+                        <!-- 选择员工的复选框 -->
+                        <input type="checkbox" :checked="employee.checked" @change="toggleEmployeeSelection(employee)"
+                            style="accent-color: #ff0000; transform: scale(1.5);" />
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
 
@@ -217,10 +217,21 @@
                     </div>
                     <div class="button-group">
                         <button type="submit" class="submit-button">保存修改</button>
+
                         <button type="button" class="cancel-button" @click="closeEditEmployeeModal">取消</button>
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- 删除的模态框 -->
+    <div v-if="showDelectModal" class="delectModal">
+        <div class="modal-content">
+            <h3>确认删除</h3>
+            <p>确定要删除这名员工吗?</p>
+            <button @click="confirmDelete" class="delectConfirm">确认</button>
+            <button @click="cancelDelete" class="delectCancel">取消</button>
         </div>
     </div>
 </template>
@@ -229,13 +240,15 @@
 import { ref, reactive, onMounted } from 'vue';
 import axios from 'axios';
 import { regionData } from 'element-china-area-data';
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 // 员工列表
 
-const employees = ref([]);  
-const searchQuery = ref('');  
+const employees = ref([]);
+const searchQuery = ref('');
 const filteredEmployees = ref([]);
 
+const showDelectModal = ref(false);
 
 // 控制"新增员工"对话框的显示
 const showAddEmployeeModal = ref(false);
@@ -373,33 +386,33 @@ const handleEditEmployee = () => {
     }
 };
 // 搜索员工的函数  
-const searchEmployees = () => {  
-    if (searchQuery.value.trim() === '') {  
+const searchEmployees = () => {
+    if (searchQuery.value.trim() === '') {
         // 如果搜索框为空，显示所有员工  
-        filteredEmployees.value = employees.value;  
-    } else {  
+        filteredEmployees.value = employees.value;
+    } else {
         // 根据输入的字符过滤员工  
-        filteredEmployees.value = employees.value.filter(employee => {  
-            return Object.values(employee).some(value =>   
-                String(value).includes(searchQuery.value)  
-            );  
-        });  
-    }  
-}; 
+        filteredEmployees.value = employees.value.filter(employee => {
+            return Object.values(employee).some(value =>
+                String(value).includes(searchQuery.value)
+            );
+        });
+    }
+};
 // 获取员工数据
-const fetchEmployees = async () => {  
-    try {  
-        const response = await axios.get('http://localhost:8080/api/employees');  
-        employees.value = response.data.map((employee) => ({  
-            ...employee,  
-            checked: false,  
-        }));  
+const fetchEmployees = async () => {
+    try {
+        const response = await axios.get('http://localhost:8080/api/employees');
+        employees.value = response.data.map((employee) => ({
+            ...employee,
+            checked: false,
+        }));
         filteredEmployees.value = employees.value; // 默认显示所有员工  
-    } catch (error) {  
-        console.error('获取员工数据失败:', error);  
-        alert('获取员工数据失败，请检查后重试。');  
-    }  
-}; 
+    } catch (error) {
+        console.error('获取员工数据失败:', error);
+        alert('获取员工数据失败，请检查后重试。');
+    }
+};
 
 // 关闭"新增员工"对话框并重置表单
 const closeAddEmployeeModal = () => {
@@ -567,37 +580,35 @@ const toggleEmployeeSelection = (employee) => {
     }
 };
 
-//删除员工
-const deleteEmployee = async () => {
-    try {
-        if (selectedEmployeeInfo.value) {
-            // 发送 DELETE 请求到后端API删除员工  
-            await axios.delete(`http://localhost:8080/api/employees/${selectedEmployeeInfo.value.employeeId}`);
-            alert('员工信息删除成功!');
-            // 从员工列表中移除已删除的员工  
-            employees.value = employees.value.filter(employee => employee.employeeId !== selectedEmployeeInfo.value.employeeId);
-            // 清空选中的员工信息  
-            selectedEmployeeInfo.value = null;
-        } else {
-            alert('请先选择要删除的员工');
-        }
-    } catch (error) {
-        console.error('删除员工信息失败:', error);
-        alert('删除员工信息失败,存在薪资记录，尝试');
+
+// 显示删除员工的模态框
+const deleteEmployee = () => {
+    if (selectedEmployeeInfo.value) {
+        showDelectModal.value = true; // 显示模态框  
+    } else {
+        alert('请先选择要删除的员工');
     }
 };
 
-
-// // 发送选中的员工信息到后端的函数  
-// const sendSelectedEmployeeToBackend = async (employeeInfo) => {
-//     try {
-//         // 注意：这里的URL应该替换实际的后端API地址  
-//         const response = await axios.post('http://your-backend-api-url/selected-employee', employeeInfo);
-//         console.log('选中的员工信息已成功发送到后端:娃哈哈', response.data);
-//     } catch (error) {
-//         console.error('发送选中员工信息到后端失败:娃哈哈', error);
-//     }
-// };
+//删除员工
+const confirmDelete = async () => {
+    try {
+        await axios.delete(`http://localhost:8080/api/employees/${selectedEmployeeInfo.value.employeeId}`);
+        alert('员工信息删除成功!');
+        employees.value = employees.value.filter(employee => employee.employeeId !== selectedEmployeeInfo.value.employeeId);
+        selectedEmployeeInfo.value = null;
+        window.location.reload();
+    } catch (error) {
+        console.error('删除员工信息失败:', error);
+        alert('删除员工信息失败,存在薪资记录，尝试');
+    } finally {
+        showDelectModal.value = false; // 关闭模态框  
+    }
+};
+// 取消删除
+const cancelDelete = () => {  
+    showDelectModal.value = false; // 关闭模态框  
+}; 
 
 // 初始化时获取员工数据
 onMounted(async () => {
@@ -652,34 +663,43 @@ onMounted(async () => {
 }
 
 /* 搜索框 */
-.tools .searchBox {  
-    background-image: url('../../assets/搜索.png');  
-    background-size: 20px 20px;  
-    background-repeat: no-repeat;  
-    background-position: 2% 50%;  
-    width: 300px;  
-    height: 35px;  
-    border-radius: 8px;  
-    border: #d7d1d1 1px solid;  
-    padding-left: 30px;  
-    transition: border-color 0.3s; /* 添加过渡效果 */
-    margin-left: 636px;  
-}  
-/* 悬停时的边框颜色 */  
-.tools .searchBox:hover {  
-    border: 2px solid #67a99d; /* 悬停时的边框颜色 */  
-}  
-/* 聚焦时的边框颜色 */  
-.tools .searchBox:focus {  
-    outline: none; /* 去掉默认的聚焦轮廓 */  
-    border-color: gray; /* 聚焦时的边框颜色 */  
-}  
-/* 当鼠标悬停并且输入框获得焦点时，边框颜色保持绿色 */  
-.tools .searchBox:hover:focus {  
-    border-color: #67a99d; /* 悬停并聚焦时的边框颜色 */  
+.tools .searchBox {
+    background-image: url('../../assets/搜索.png');
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: 2% 50%;
+    width: 300px;
+    height: 35px;
+    border-radius: 8px;
+    border: #d7d1d1 1px solid;
+    padding-left: 30px;
+    transition: border-color 0.3s;
+    /* 添加过渡效果 */
+    margin-left: 636px;
 }
+
+/* 悬停时的边框颜色 */
+.tools .searchBox:hover {
+    border: 2px solid #67a99d;
+    /* 悬停时的边框颜色 */
+}
+
+/* 聚焦时的边框颜色 */
+.tools .searchBox:focus {
+    outline: none;
+    /* 去掉默认的聚焦轮廓 */
+    border-color: gray;
+    /* 聚焦时的边框颜色 */
+}
+
+/* 当鼠标悬停并且输入框获得焦点时，边框颜色保持绿色 */
+.tools .searchBox:hover:focus {
+    border-color: #67a99d;
+    /* 悬停并聚焦时的边框颜色 */
+}
+
 /* 搜索按钮 */
-.tools .searchBotton{
+.tools .searchBotton {
     width: 69px;
     height: 35px;
     margin-left: 10px;
@@ -687,11 +707,13 @@ onMounted(async () => {
     background-color: rgb(230, 230, 230);
     border: 1px solid gray;
 }
-.tools .searchBotton:hover{
-    border:1.4px solid #218838;
+
+.tools .searchBotton:hover {
+    border: 1.4px solid #218838;
     background-color: rgb(222, 222, 222);
 }
-.tools .searchBotton:active{
+
+.tools .searchBotton:active {
     background-color: #e9e9ea;
 }
 
@@ -699,9 +721,11 @@ onMounted(async () => {
 .employee-button.add {
     background-color: #28a745;
 }
+
 .employee-button.edit {
     background-color: #5183e6;
 }
+
 .employee-button.delete {
     background-color: #e03122;
 }
@@ -710,9 +734,11 @@ onMounted(async () => {
 .employee-button.add:hover {
     background-color: #218838;
 }
+
 .employee-button.edit:hover {
     background-color: #3a6fb0;
 }
+
 .employee-button.delete:hover {
     background-color: #c0271a;
 }
@@ -832,4 +858,52 @@ label {
 .text-lightgray {
     color: lightgray;
 }
+
+/* 删除按钮的遮罩层 */
+.delectModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* 遮罩层的宽高 */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* 删除的模态框 */
+.delectModal .modal-content{
+    width: 333px;
+    height: 150px;
+}
+/* 删除确认按钮 */
+.delectModal .delectConfirm{
+    width: 90px;
+    height: 30px;
+    margin-left: 44px;
+    border-radius: 8px;
+    background-color: #ce4230;
+    border: none;
+}
+.delectModal .delectConfirm:hover{
+    background-color: red;
+}
+/* 删除的取消按钮 */
+.delectModal .delectCancel{
+    width: 90px;
+    height: 30px;
+    margin-top: 20px;
+    margin-left: 20px;
+    border-radius: 8px;
+    background-color: #5a9cf8;
+    border: none;
+}
+.delectModal .delectCancel:hover{
+    background-color: #0073ff;
+}
+.delectModal p{
+    margin-top: 20px;
+}
+
 </style>
