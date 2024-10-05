@@ -123,7 +123,8 @@
                 <tbody>
                     <!-- 使用 v-for 迭代薪资记录 -->
                     <tr v-for="(record, index) in salaryRecords" :key="record.employee_id"
-                        :class="{ 'bg-white': index % 2 === 0, 'bg-gray-200': index % 2 !== 0 }">
+                        :class="{ 'bg-white': index % 2 === 0, 'bg-gray-200': index % 2 !== 0 }"
+                        :style="{ animationDelay: (index * 0.033) + 's' }">
                         <td>{{ record.employeeId }}</td>
                         <td>{{ record.name }}</td>
                         <td>{{ record.phone }}</td>
@@ -468,5 +469,27 @@ input:focus {
 .fade-enter,
 .fade-leave-to {
     opacity: 0;
+}
+
+
+/* 表格动画效果 */
+@keyframes slideIn {  
+    from {  
+        transform: translateX(-100%);  
+        opacity: 0;  
+    }  
+    to {  
+        transform: translateX(0);  
+        opacity: 1;  
+    }  
+}  
+
+.table-container {  
+    overflow: hidden; /* 确保动画效果不超出容器 */  
+}  
+
+.salary-table tr {  
+    opacity: 0; /* 初始透明度为0 */  
+    animation: slideIn 0.3s ease forwards; /* 应用动画 */  
 }
 </style>

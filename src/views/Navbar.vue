@@ -2,34 +2,33 @@
     <div class="container">
         <!-- 导航栏 -->
         <nav class="navbar">
-            <router-link to="#" @click.prevent="showAddEmployeeModal">新增员工</router-link>
             <router-link to="/toDoList" class="navbarItem">
                 <img src="../../assets/backlog.png"class="icon" />
-                待办事项
+                待办事项清单
             </router-link>
             <router-link to="/salaryDashboard" class="navbarItem">
                 <img src="../../assets/SalaryIcon.png"class="icon" />
-                薪资看板
+                企业薪资看板
             </router-link>
             <router-link to="/employeeRecords" class="navbarItem">
                 <img src="../../assets/EmployeeFile.png"class="icon" />
-                员工档案
+                员工档案管理
             </router-link>
             <router-link to="/salaryPaymentRecord" class="navbarItem">
                 <img src="../../assets/record.png">
                 薪资发放记录
             </router-link>
-            <router-link to="/salaryItems" class="navbarItem">
+            <!-- <router-link to="/salaryItems" class="navbarItem">
                 <img src="../../assets/salaryItem.png"class="icon" />
                 薪资项
-            </router-link>
+            </router-link> -->
             <router-link to="/Payslip" class="navbarItem">
                 <img src="../../assets/salarypay.png"class="icon" />
-                工资发放
+                员工薪资发放
             </router-link>
             <router-link to="/problemFeedback" class="navbarItem">
                 <img src="../../assets/feedback.png"class="icon" />
-                问题反馈
+                问题反馈表单
             </router-link>
         </nav>
 
@@ -69,23 +68,29 @@ export default {
     width: 333px;
     height: 100%;
     background-color: #d7d7d7;
+
 }
 
 .navbar img {
     width: 25px;
+    height: 25px;
+    margin: 5px 10px; 
 }
 
-.navbarItem {
-    display: block;
-    font-size: 22px;
-    text-decoration: none;
-    border-radius: 6px 6px 6px 6px;
-}
+.navbarItem {  
+    display: flex; /* 使用 Flexbox */  
+    align-items: center; /* 垂直居中对齐 */  
+    font-size: 22px;  
+    text-decoration: none;  
+    border-radius: 6px;  
+    color: #000;  
+    padding: 10px; /* 添加一些内边距以增加点击区域 */  
+} 
 
 /* 让正在显示的路由高亮 */
 .router-link-active {
     /* 高亮背景色 */
-    background-color: #bfd2e6;
+    background-color: #485f77;
     /* 高亮文字颜色 */
     color: white;
 }

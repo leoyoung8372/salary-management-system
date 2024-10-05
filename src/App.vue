@@ -41,7 +41,7 @@ export default {
 .navbar {
   width: 333px;
   height: 100%;
-  background-color: #d7d7d7;
+  background-color: #ffffff;
   position: fixed;
   /* 固定左侧导航栏 */
 }
