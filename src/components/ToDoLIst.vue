@@ -1,42 +1,63 @@
 <template>  
-  <div class="demo-date-picker">  
-    <div class="block">  
-      <!-- 日期选择器组件 -->  
-      <el-date-picker  v-model="value1" type="date" placeholder="Pick a day" size="large"/>  
-    </div>  
+  <div class="check-in-container">  
+    <h2>签到</h2>  
+    <form @submit.prevent="handleCheckIn">  
+      <div>  
+        <label for="employeeId">员工ID:</label>  
+        <input type="text" v-model="attendanceRecord.employeeId" required />  
+      </div>  
+      <div>  
+        <label for="checkInTime">签到时间:</label>  
+        <input type="datetime-local" v-model="attendanceRecord.checkInTime" required />  
+      </div>  
+      <div>  
+        <label for="status">状态:</label>  
+        <select v-model="attendanceRecord.status" required>  
+          <option value="正常">正常</option>  
+          <option value="迟到">迟到</option>  
+          <option value="缺勤">缺勤</option>  
+        </select>  
+      </div>  
+      <div>  
+        <label for="date">日期:</label>  
+        <input type="date" v-model="attendanceRecord.date" required />  
+      </div>  
+      <button type="submit">签到</button>  
+    </form>  
+    <p v-if="message">{{ message }}</p>  
   </div>  
 </template>  
 
 <script setup>  
-import { ref } from 'vue'  
+import { ref } from 'vue';  
+import axios from 'axios';  
 
-// 定义响应式变量，用于存储选择的日期  
-const value1 = ref('')  
+const attendanceRecord = ref({  
+  employeeId: '',  
+  checkInTime: '',  
+  status: '正常',  
+  date: ''  
+});  
+
+const message = ref('');  
+
+const handleCheckIn = async () => {  
+  try {  
+    const response = await axios.post('http://localhost:8080/api/attendance/checkin', attendanceRecord.value);  
+    message.value = response.data; // 显示成功消息  
+  } catch (error) {  
+    message.value = '签到失败: ' + (error.response?.data || error.message); // 显示错误消息  
+  }  
+};  
 </script>  
 
 <style scoped>  
-.demo-date-picker {  
-  display: flex;  /* 使用flex布局 */  
-  width: 100%;    /* 容器宽度为100% */  
-  padding: 0;     /* 去除内边距 */  
-  flex-wrap: wrap; /* 允许换行 */  
-}  
-
-.demo-date-picker .block {  
-  padding: 30px 0; /* 设置上下内边距 */  
-  text-align: center; /* 文本居中对齐 */  
-  border-right: solid 1px var(--el-border-color); /* 右边框 */  
-  flex: 1; /* 使每个块均匀分配空间 */  
-}  
-
-.demo-date-picker .block:last-child {  
-  border-right: none; /* 去除最后一个块的右边框 */  
-}  
-
-.demo-date-picker .demonstration {  
-  display: block; /* 作为块元素显示 */  
-  color: var(--el-text-color-secondary); /* 设置文本颜色 */  
-  font-size: 14px; /* 设置字体大小 */  
-  margin-bottom: 20px; /* 设置底部外边距 */  
+.check-in-container {  
+  max-width: 400px;  
+  margin: auto;  
+  padding: 20px;  
+  border: 1px solid #ccc;  
+  border-radius: 8px;  
+  background-color: #f9f9f9;  
 }  
 </style>
