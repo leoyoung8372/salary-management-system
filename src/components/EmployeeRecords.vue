@@ -48,7 +48,6 @@
                         <!-- 身份证地址选择 -->
                         <div class="form-group">
                             <label for="address">身份证地址:</label>
-                            <br />
                             <el-cascader size="large" :options="options" v-model="selectedOptions"
                                 @change="handleAddressChange" class="form-input"
                                 :props="{ checkStrictly: true }"></el-cascader>
@@ -243,7 +242,6 @@ import { regionData } from 'element-china-area-data';
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 // 员工列表
-
 const employees = ref([]);
 const searchQuery = ref('');
 const filteredEmployees = ref([]);
@@ -606,9 +604,9 @@ const confirmDelete = async () => {
     }
 };
 // 取消删除
-const cancelDelete = () => {  
+const cancelDelete = () => {
     showDelectModal.value = false; // 关闭模态框  
-}; 
+};
 
 // 初始化时获取员工数据
 onMounted(async () => {
@@ -797,7 +795,7 @@ onMounted(async () => {
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 7px;
 }
 
 label {
@@ -872,13 +870,15 @@ label {
     justify-content: center;
     align-items: center;
 }
+
 /* 删除的模态框 */
-.delectModal .modal-content{
+.delectModal .modal-content {
     width: 333px;
     height: 150px;
 }
+
 /* 删除确认按钮 */
-.delectModal .delectConfirm{
+.delectModal .delectConfirm {
     width: 90px;
     height: 30px;
     margin-left: 44px;
@@ -886,11 +886,13 @@ label {
     background-color: #ce4230;
     border: none;
 }
-.delectModal .delectConfirm:hover{
+
+.delectModal .delectConfirm:hover {
     background-color: red;
 }
+
 /* 删除的取消按钮 */
-.delectModal .delectCancel{
+.delectModal .delectCancel {
     width: 90px;
     height: 30px;
     margin-top: 20px;
@@ -899,11 +901,12 @@ label {
     background-color: #5a9cf8;
     border: none;
 }
-.delectModal .delectCancel:hover{
+
+.delectModal .delectCancel:hover {
     background-color: #0073ff;
 }
-.delectModal p{
+
+.delectModal p {
     margin-top: 20px;
 }
-
 </style>
