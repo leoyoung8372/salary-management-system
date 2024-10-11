@@ -30,6 +30,10 @@ public interface EmployeeRepository {
     @Update("UPDATE employees SET name=#{name}, department=#{department}, position=#{position}, birth_date=#{birthDate}, hire_date=#{hireDate}, phone=#{phone}, status=#{status}, id_card=#{idCard}, gender=#{gender}, address=#{address} WHERE employee_id=#{employeeId}")
     void updateEmployee(Employee employee);
 
+    //根据员工ID获取该员工信息
+    @Select("SELECT * FROM employees WHERE employee_id = #{employee_id}")
+    List<Employee> getEmployeeByEmployeeId(@Param("employee_id") String employeeId);
+
     //根据员工ID删除员工信息
     @Delete("DELETE FROM employees WHERE employee_id = #{employeeId}")
     void deleteByEmployeeId(@Param("employeeId") String employeeId);

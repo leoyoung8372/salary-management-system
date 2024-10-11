@@ -16,8 +16,7 @@ public class EmployeeService {
 
     // 获取所有员工信息的方法
     public List<Employee> getAllEmployees() {
-        // 调用 repository 方法获取所有员工
-        return employeeRepository.getAllEmployees();
+        return employeeRepository.getAllEmployees(); // 调用 repository 方法获取所有员工
     }
 
     // 创建新员工的方法
@@ -39,6 +38,11 @@ public class EmployeeService {
     //更新员工数据
     public void updateEmployee(Employee employee) {
         employeeRepository.updateEmployee(employee);
+    }
+
+    //根据员工ID获取该员工信息
+    public List<Employee> getEmployeeByEmployeeId(String employeeId) {
+        return employeeRepository.getEmployeeByEmployeeId(employeeId);
     }
 
     //删除员工

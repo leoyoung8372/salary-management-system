@@ -56,6 +56,16 @@ public class EmployeeController {
         employeeService.updateEmployee(employee);
     }
 
+    //根据员工ID获取该员工信息
+    @GetMapping("/info/{employeeId}")
+   public ResponseEntity<?> getEmployeeById(@PathVariable String employeeId) {
+        List<Employee> employees = employeeService.getEmployeeByEmployeeId(employeeId);
+        if (employees.isEmpty()) {
+            return ResponseEntity.notFound().build(); // 返回404 Not Found
+        }
+        return ResponseEntity.ok(employees.get(0));
+    }
+
     // 根据员工ID删除员工信息
     @DeleteMapping("/{employeeId}")
     public ResponseEntity<String> deleteEmployee(@PathVariable String employeeId) {

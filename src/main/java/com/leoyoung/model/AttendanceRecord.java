@@ -16,4 +16,9 @@ public class AttendanceRecord {
     private Date date; // 考勤日期，不能为空
     private Date createdAt; // 创建时间，默认值为当前时间
     private Date updatedAt; // 更新时间，默认值为当前时间
+    private String salaryCycle;//薪资周期
+    private String notes;//备注
+    private String name;
+    private String department;
+    private String position;
 }

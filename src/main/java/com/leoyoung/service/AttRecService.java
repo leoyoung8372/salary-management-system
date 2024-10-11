@@ -16,8 +16,14 @@ public class AttRecService {
     private AttRecRepository attRecRepository;
 
     //插入打卡记录
-    public void insertCheckInRecord(String employeeId, Date checkInTime, String status, Date date){
-        attRecRepository.insertCheckInRecord(employeeId,checkInTime,status,date);
+    public void insertCheckInRecord(String employeeId, Date checkInTime, String status, Date date,
+                                    String salaryCycle,String notes,String name,String department,String position){
+        attRecRepository.insertCheckInRecord(employeeId,checkInTime,status,date,salaryCycle,notes,name,department,position);
+    }
+
+    //获取所有记录
+    public List<AttendanceRecord> getAttendanceRecords(){
+        return attRecRepository.findAll();
     }
 
     //根据员工ID和日期查询考勤记录
