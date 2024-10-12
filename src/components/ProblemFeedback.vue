@@ -62,9 +62,9 @@
                             <th style="width: 88px;">员工姓名</th>  
                             <th style="width: 88px;">所属部门</th>  
                             <th style="width: 88px;">所在岗位</th>  
-                            <th style="width: 100px;">日期</th>  
-                            <!-- <th>归属薪资日期</th> -->
-                            <th style="width: 100px;">状态</th>
+                            <!-- <th style="width: 100px;">日期</th>   -->
+                            <th style="width: 110px;">归属薪资日期</th>
+                            <th style="width: 90px;">状态</th>
                             <th>备注</th>
                         </tr>  
                     </thead>  
@@ -75,8 +75,8 @@
                             <td>{{ record.name }}</td>  
                             <td>{{ record.department }}</td>  
                             <td>{{ record.position }}</td>  
-                            <td>{{ formatDateOnly(record.date) }}</td>   
-                            <!-- <td>{{ record.salaryCycle }}</td>   -->
+                            <!-- <td>{{ formatDateOnly(record.date) }}</td>    -->
+                            <td>{{ record.salaryCycle }}</td>  
                             <td>{{ record.status }}</td>
                             <td style="font-size: 15px;">{{ record.notes }}</td>  
 
@@ -115,7 +115,8 @@ const fetchAttendanceRecords = async () => {
     try {  
         const response = await fetch('http://localhost:8080/api/attendance/AllRecords');  
         if (response.ok) {  
-            attendanceRecords.value = await response.json();  
+            // 在渲染的时就反转数组，让最新记录在上。
+            attendanceRecords.value = (await response.json()).reverse();   
         } else {  
             console.error('获取打卡记录失败', response.statusText);  
         }  
@@ -161,6 +162,7 @@ const determineStatus = (time) => {
     }  
     return '不可签到'; // 确保所有未匹配的时间都返回不可签到  
 };  
+
 
 // 监听签到时间的变化  
 watch(() => attendanceRecord.value.checkInTime, (newTime) => {  
@@ -236,6 +238,22 @@ const fetchEmployeeInfo = async () => {
 // 处理打卡的函数  
 const handleCheckIn = async () => {  
     try {  
+        // 调用判断是否已打卡的API  
+        const checkInResponse = await fetch(`http://localhost:8080/api/attendance/ifCheckin?employeeId=${attendanceRecord.value.employeeId}&checkInTime=${attendanceRecord.value.checkInTime}`);  
+        
+        if (checkInResponse.ok) {  
+            const isCheckedIn = await checkInResponse.text(); // 假设返回的是字符串  
+
+            if (isCheckedIn.includes("您已在该时间段打卡")) {  
+                alert('您已在该时间段打卡，请勿重复打卡。');  
+                return; // 终止后续打卡逻辑  
+            }  
+        } else {  
+            console.error('检查打卡状态失败', checkInResponse.statusText);  
+            return; // 处理错误情况  
+        }  
+
+        // 如果未打卡，继续提交打卡请求  
         const response = await fetch('http://localhost:8080/api/attendance/checkin', {  
             method: 'POST',  
             headers: {  
@@ -246,6 +264,7 @@ const handleCheckIn = async () => {
 
         if (response.ok) {  
             console.log('打卡成功');  
+            alert('打卡成功！');  
             fetchAttendanceRecords(); // 打卡成功后重新获取打卡记录  
         } else {  
             console.error('打卡失败', response.statusText);  
@@ -253,7 +272,7 @@ const handleCheckIn = async () => {
     } catch (error) {  
         console.error('请求错误', error);  
     }  
-};  
+}; 
 
 // 清空表单内容的函数  
 const clearForm = () => {  
@@ -382,12 +401,14 @@ const clearForm = () => {
 
 .aside-right table {
     width: 100%;
+    margin-top: 12px;
     border-collapse: collapse;
 }
 
 th,
 td {
-    border: 1px solid #784747;
+    /* 表格边框线颜色 */
+    border: 1px solid rgb(169, 169, 169);
     padding: 5px;
     text-align: left;
     text-align: center; /* 水平居中 */  

@@ -357,7 +357,7 @@ h2 {
 
 /* 标签样式 */
 .rubric label {
-    padding: 10px;
+    margin: 8px 0;
     font-family: Roboto;
     font-weight: 300;
 }
@@ -367,6 +367,7 @@ h2 {
     border: 2px solid #e9e9e9;
     font-family: Roboto;
     font-weight: 300;
+    padding: 5px 0;
 }
 
 /* 输入框聚焦样式 */
@@ -384,7 +385,6 @@ input:focus {
     color: white;
     border: none;
 }
-
 .textClean:hover {
     background-color: #9d1616;
 }
