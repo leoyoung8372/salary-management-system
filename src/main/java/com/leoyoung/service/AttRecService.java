@@ -26,6 +26,12 @@ public class AttRecService {
         return attRecRepository.findAll();
     }
 
+    //根据员工ID和签到时间查询
+    public boolean hasCheckedIn(String employeeId, String checkInTime) {
+        int count = attRecRepository.countAttendanceRecords(employeeId, checkInTime);
+        return count > 0; // 如果记录数量大于0，表示已打卡
+    }
+
     //根据员工ID和日期查询考勤记录
     public List<AttendanceRecord> getAttRecByEmployeeIdAndDate(String employeeId, Date date){
         return attRecRepository.getAttRecByEmployeeIdAndDate(employeeId,date);

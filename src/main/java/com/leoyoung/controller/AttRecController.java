@@ -47,6 +47,16 @@ public class AttRecController {
         return attRecService.getAttendanceRecords();
     }
 
+    //根据员工ID和签到时间查询
+    @GetMapping("/ifCheckin")
+    public ResponseEntity<String> ifCheckIn(@RequestParam String employeeId, @RequestParam String checkInTime) {
+        // 检查是否已打卡
+        if (attRecService.hasCheckedIn(employeeId, checkInTime)) {
+            return ResponseEntity.ok("您已在该时间段打卡，请勿重复打卡。");
+        }
+        return ResponseEntity.ok("可以打卡");
+    }
+
     //根据员工ID和日期查询考勤记录
     @GetMapping("/records")
     public ResponseEntity<List<AttendanceRecord>> getAttendanceRecords(
