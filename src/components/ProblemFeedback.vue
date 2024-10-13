@@ -237,42 +237,48 @@ const fetchEmployeeInfo = async () => {
 
 // 处理打卡的函数  
 const handleCheckIn = async () => {  
+    // 获取员工ID  
+    const employeeId = attendanceRecord.value.employeeId;  
+    // 获取用户选择的打卡时间，并转换为ISO格式  
+    const checkInTime = new Date(attendanceRecord.value.checkInTime).toISOString();  
     try {  
-        // 调用判断是否已打卡的API  
-        const checkInResponse = await fetch(`http://localhost:8080/api/attendance/ifCheckin?employeeId=${attendanceRecord.value.employeeId}&checkInTime=${attendanceRecord.value.checkInTime}`);  
-        
-        if (checkInResponse.ok) {  
-            const isCheckedIn = await checkInResponse.text(); // 假设返回的是字符串  
-
-            if (isCheckedIn.includes("您已在该时间段打卡")) {  
-                alert('您已在该时间段打卡，请勿重复打卡。');  
-                return; // 终止后续打卡逻辑  
-            }  
-        } else {  
-            console.error('检查打卡状态失败', checkInResponse.statusText);  
-            return; // 处理错误情况  
-        }  
-
-        // 如果未打卡，继续提交打卡请求  
-        const response = await fetch('http://localhost:8080/api/attendance/checkin', {  
-            method: 'POST',  
+        // 发送GET请求，检查员工是否可以打卡  
+        const checkInResponse = await fetch(`http://localhost:8080/api/attendance/can-checkin?employeeId=${employeeId}&checkInTime=${checkInTime}`, {  
+            method: 'GET',  
             headers: {  
                 'Content-Type': 'application/json',  
             },  
-            body: JSON.stringify(attendanceRecord.value),  
         });  
-
-        if (response.ok) {  
-            console.log('打卡成功');  
-            alert('打卡成功！');  
-            fetchAttendanceRecords(); // 打卡成功后重新获取打卡记录  
+        // 如果可以打卡  
+        if (checkInResponse.ok) {  
+            // 发送POST请求，进行打卡  
+            const response = await fetch('http://localhost:8080/api/attendance/checkin', {  
+                method: 'POST',  
+                headers: {  
+                    'Content-Type': 'application/json',  
+                },  
+                // 将考勤记录作为请求体发送  
+                body: JSON.stringify(attendanceRecord.value),  
+            });  
+            // 如果打卡成功  
+            if (response.ok) {  
+                console.log('打卡成功');  // 在控制台输出成功信息  
+                alert('打卡成功！');  // 弹出提示框告知用户打卡成功  
+                fetchAttendanceRecords();  // 重新获取考勤记录  
+            } else {  
+                // 如果打卡失败，输出错误信息  
+                console.error('打卡失败', response.statusText);  
+            }  
         } else {  
-            console.error('打卡失败', response.statusText);  
+            // 如果无法打卡，获取错误信息并输出  
+            const errorMessage = await checkInResponse.text();  
+            alert(`${errorMessage}`);  // 可选择弹出提示框告知用户打卡失败  
         }  
     } catch (error) {  
+        // 捕获并输出请求错误  
         console.error('请求错误', error);  
     }  
-}; 
+};
 
 // 清空表单内容的函数  
 const clearForm = () => {  
