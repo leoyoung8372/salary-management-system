@@ -4,6 +4,7 @@ import com.leoyoung.model.AttendanceRecord;
 import com.leoyoung.service.AttRecService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,14 +48,16 @@ public class AttRecController {
         return attRecService.getAttendanceRecords();
     }
 
-    //根据员工ID和签到时间查询
-    @GetMapping("/ifCheckin")
-    public ResponseEntity<String> ifCheckIn(@RequestParam String employeeId, @RequestParam String checkInTime) {
-        // 检查是否已打卡
-        if (attRecService.hasCheckedIn(employeeId, checkInTime)) {
-            return ResponseEntity.ok("您已在该时间段打卡，请勿重复打卡。");
+    //根据员工ID和签到时间查询是否存在时间段内的打卡记录
+    @GetMapping("/can-checkin")
+    public ResponseEntity<String> canCheckIn(@RequestParam String employeeId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date checkInTime) {
+        // 检查是否可以打卡
+        boolean canCheckIn = attRecService.canCheckIn(employeeId, checkInTime);
+        if (canCheckIn) {
+            return ResponseEntity.ok("可以打卡！");
+        } else {
+            return ResponseEntity.status(400).body("打卡失败：该时间段内已存在打卡记录。");
         }
-        return ResponseEntity.ok("可以打卡");
     }
 
     //根据员工ID和日期查询考勤记录
