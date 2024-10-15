@@ -102,6 +102,10 @@
                     <p>加班费 = 60元/天 × 加班天数;</p>
                     <p>津贴 = 300元/月;</p>
                 </div>
+                <div class="explain">
+                    <p>提示: </p>
+                    <p>查询后会自动填充薪资到输入框中，不使用查询会导致无法填充基本工资，导致提交失败</p>
+                </div>
             </div>
 
         </div>
@@ -118,7 +122,7 @@ const employees = ref([]); // 员工列表
 const selectedEmployee = ref(''); // 选中的员工ID   
 const salaryDate = ref(''); // 薪资归属日期  
 const employeeId = ref(''); // 工号  
-const baseSalary = ref(0.00); // 基本工资  
+const baseSalary = ref(''); // 基本工资  
 const performanceSalary = ref(0.00); // 绩效  
 const allowance = ref(0.00); // 津贴  
 const bonus = ref(0.00); // 奖金  
@@ -259,14 +263,13 @@ async function submitSalary() {
         console.error("提交失败:", error);
         if (error.response) {
             console.error("服务器返回的错误:", error.response.data);
-            showWarning(`提交失败: ${error.response.data.message || error.response.data}`);
+            showWarning(`提交失败，注意检查“薪资发放日期”: ${error.response.data.message || error.response.data}`);
         } else {
             showWarning("提交失败: 网络错误或服务器未响应");
         }
     }
 }
 
-// 获取考勤统计信息  
 // 获取考勤统计信息  
 async function getAttendanceSummary() {  
     const yearMonth = searchSalaryDate.value; // 薪资归属日期  

@@ -31,10 +31,10 @@
                 <img src="../../assets/salarypay.png"class="icon" />
                 员工薪资发放
             </router-link>
-            <router-link to="/problemFeedback" class="navbarItem">
+            <!-- <router-link to="/problemFeedback" class="navbarItem">
                 <img src="../../assets/feedback.png"class="icon" />
                 问题反馈表单
-            </router-link>
+            </router-link> -->
         </nav>
 
         <!-- 模态框 -->

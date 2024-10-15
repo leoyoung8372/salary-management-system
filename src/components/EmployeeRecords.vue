@@ -89,7 +89,7 @@
                         </div>
                         <!-- 出生日期输入框 -->
                         <div class="form-group">
-                            <label for="birthDate">出生日期:</label><br>
+                            <label for="birthDate">出生日期:</label>
                             <input type="date" v-model="employee.birthDate" required class="form-input" />
                         </div>
                         <!-- 入职日期输入框 -->
@@ -193,14 +193,11 @@
                             </template>
 
                             <template v-else-if="key === 'department'">
-                                <select v-model="editingEmployee[key]" :id="key" class="form-input"
-                                    @change="updatePositions(editingEmployee[key], editingEmployee)">
-                                    <option v-for="dept in departments" :key="dept" :value="dept">{{ dept }}</option>
-                                </select>
+                                <input type="text" :value="editingEmployee[key]" class="form-input" readonly /> 
                             </template>
 
                             <template v-else-if="key === 'position'">
-                                <select v-model="editingEmployee[key]" :id="key" class="form-input">
+                                <select v-model="editingEmployee[key]" :id="key" class="form-input" >
                                     <option v-for="pos in positions" :key="pos" :value="pos">{{ pos }}</option>
                                 </select>
                             </template>
