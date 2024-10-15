@@ -37,44 +37,44 @@
                     <div class="form-item">
                         <label class="label"><span class="required">*</span>基本工资</label>
                         <input type="number" min="0" max="50000" v-model.number="baseSalary" placeholder="输入基本工资"
-                            class="input" step="0.01" @input="calculateTotalPayroll">
+                            class="input" step="0.01" @input="calculateTotalPayroll" readonly>
                     </div>
                     <div class="form-item">
                         <label class="label">绩效</label>
                         <input type="number" min="0" max="50000" v-model.number="performanceSalary" placeholder="输入绩效"
-                            class="input" step="0.01" @input="calculateTotalPayroll">
+                            class="input" step="0.01" @input="calculateTotalPayroll" readonly>
                     </div>
                     <div class="form-item">
                         <label class="label">津贴</label>
                         <input type="number" min="0" max="50000" v-model.number="allowance" placeholder="输入津贴"
-                            class="input" step="0.01" @input="calculateTotalPayroll">
+                            class="input" step="0.01" @input="calculateTotalPayroll" readonly>
                     </div>
                     <div class="form-item">
                         <label class="label">奖金</label>
                         <input type="number" min="0" max="50000" v-model.number="bonus" placeholder="输入奖金" class="input"
-                            step="0.01" @input="calculateTotalPayroll">
+                            step="0.01" @input="calculateTotalPayroll" readonly>
                     </div>
                     <div class="form-item">
                         <label class="label">扣除</label>
                         <input type="number" min="0" max="50000" v-model.number="deduction" placeholder="输入扣除"
-                            class="input" step="0.01" @input="calculateTotalPayroll">
+                            class="input" step="0.01" @input="calculateTotalPayroll" readonly>
                     </div>
                     <div class="form-item">
                         <label class="label">加班费</label>
                         <input type="number" min="0" max="50000" v-model.number="overtimePay" placeholder="输入加班费"
-                            class="input" step="0.01" @input="calculateTotalPayroll">
+                            class="input" step="0.01" @input="calculateTotalPayroll" readonly>
                     </div>
                     <div class="form-item">
                         <label class="label">应交税额</label>
                         <input type="text" :value="calculateTax()" readonly class="input">
                     </div>
-                    <div class="form-item">
+                    <div class="form-item" style="margin-bottom: 10px;">
                         <label class="label">实发薪资</label>
                         <input type="number" v-model.number="totalPayroll" readonly class="input">
                     </div>
                 </div>
                 <div class="form-item">
-                    <button @click="submitSalary" class="submit-button">提交</button>
+                    <button @click="submitSalary" class="submit-button" >提交</button>
                 </div>
             </div>
 
@@ -124,6 +124,7 @@ const allowance = ref(0.00); // 津贴
 const bonus = ref(0.00); // 奖金  
 const deduction = ref(0.00); // 扣除  
 const overtimePay = ref(0.00); // 加班费  
+const tax = ref(0)   //税费
 const totalPayroll = ref(0); // 实发薪资   
 const warningMessage = ref(''); // 警告信息  
 const warningOpacity = ref(1); // 警告透明度   
@@ -266,22 +267,45 @@ async function submitSalary() {
 }
 
 // 获取考勤统计信息  
-async function getAttendanceSummary() {
+// 获取考勤统计信息  
+async function getAttendanceSummary() {  
     const yearMonth = searchSalaryDate.value; // 薪资归属日期  
     const empId = searchEmployeeId.value; // 员工工号  
 
-    if (!yearMonth || !empId) {
-        showWarning("请填写员工工号和薪资归属日期！");
-        return;
-    }
+    if (!yearMonth || !empId) {  
+        showWarning("请填写员工工号和薪资归属日期！");  
+        return;  
+    }  
 
-    try {
-        const response = await axios.get(`http://localhost:8080/api/attendance/summary?employeeId=${empId}&salaryDate=${yearMonth}`);
-        attendanceSummary.value = response.data; // 更新考勤统计信息  
-    } catch (error) {
-        console.error("获取考勤统计信息失败:", error);
-        showWarning("获取考勤统计信息失败，请检查工号或日期。");
-    }
+    try {  
+        const response = await axios.get(`http://localhost:8080/api/attendance/summary?employeeId=${empId}&salaryDate=${yearMonth}`);  
+        attendanceSummary.value = response.data; // 更新考勤统计信息   
+
+        // 获取考勤信息  
+        const { workDays, overtimeDays, lateCount } = attendanceSummary.value;  
+
+        // 计算各项薪资  
+        const dailyWage = 160; // 每天薪资  
+        const baseSalaryCalculated = workDays * dailyWage; // 基本工资 = 上班天数 × 每天薪资  
+        const performanceCalculated = (overtimeDays >= 5 && workDays >= 15) ? 200 : 0; // 绩效奖  
+        const allowanceCalculated = 300; // 津贴  
+        const bonusCalculated = (workDays >= 22) ? 220 : 0; // 奖金  
+        const deductionCalculated = lateCount * 5; // 扣除 = 迟到次数 × 5 元  
+
+        // 填充到form-left类的输入框中  
+        baseSalary.value = baseSalaryCalculated;  
+        performanceSalary.value = performanceCalculated;  
+        allowance.value = allowanceCalculated;  
+        bonus.value = bonusCalculated;  
+        deduction.value = deductionCalculated;  
+
+        // 计算总的薪资  
+        calculateTotalPayroll(); // 重新计算实发薪资  
+
+    } catch (error) {  
+        console.error("获取考勤统计信息失败:", error);  
+        showWarning("获取考勤统计信息失败，请检查工号或日期。");  
+    }  
 }
 
 // 重置表单  
