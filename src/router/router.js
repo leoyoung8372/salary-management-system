@@ -8,6 +8,7 @@ import SalaryItems from "@/components/SalaryItems.vue";
 import Payslip from "@/components/Payslip.vue"
 import ToDoLIst from "@/components/ToDoLIst.vue";
 import ProblemFeedback from "@/components/ProblemFeedback.vue";
+import CheckIn from "@/components/CheckIn.vue";
 //创建路由器
 const router = createRouter({
     history: createWebHistory(),
@@ -44,6 +45,10 @@ const router = createRouter({
         {
             path:'/problemFeedback',
             component:ProblemFeedback
+        },
+        {
+            path:'/checkIn',
+            component:CheckIn
         }
     ]
 })

@@ -2,10 +2,15 @@
     <div class="container">
         <!-- 导航栏 -->
         <nav class="navbar">
-            <router-link to="/toDoList" class="navbarItem">
+
+            <router-link to="/checkIn" class="navbarItem">
+                <img src="../../assets/salaryItem.png" alt="">
+                考勤打卡签到
+            </router-link>
+            <!-- <router-link to="/toDoList" class="navbarItem">
                 <img src="../../assets/backlog.png"class="icon" />
                 待办事项清单
-            </router-link>
+            </router-link> -->
             <router-link to="/salaryDashboard" class="navbarItem">
                 <img src="../../assets/SalaryIcon.png"class="icon" />
                 企业薪资看板
