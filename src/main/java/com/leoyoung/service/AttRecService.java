@@ -85,6 +85,23 @@ public class AttRecService {
         return records.isEmpty();
     }
 
+
+    // 根据员工ID和薪资归属日期计算考勤统计信息
+    public AttendanceRecord calculateAttendanceSummary(String employeeId, String salaryDate) {
+        int workDays = attRecRepository.countAfternoonSignOff(employeeId, salaryDate);
+        int overtimeDays = attRecRepository.countOvertimeSignOff(employeeId, salaryDate);
+        int lateCount = attRecRepository.countLateTimes(employeeId, salaryDate);
+
+        AttendanceRecord summary = new AttendanceRecord();
+        summary.setWorkDays(workDays);
+        summary.setOvertimeDays(overtimeDays);
+        summary.setLateCount(lateCount);
+
+        return summary;
+    }
+
+
+
     //根据员工ID和日期查询考勤记录
     public List<AttendanceRecord> getAttRecByEmployeeIdAndDate(String employeeId, Date date){
         return attRecRepository.getAttRecByEmployeeIdAndDate(employeeId,date);

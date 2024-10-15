@@ -40,6 +40,34 @@ public interface AttRecRepository {
             @Param("endTime") String endTime);
 
 
+
+    // 根据员工ID和薪资归属日期统计"下午签退"的次数
+    @Select("SELECT COUNT(*) FROM attendance_record " +
+            "WHERE employee_id = #{employeeId} " +
+            "AND DATE_FORMAT(date, '%Y-%m') = #{salaryDate} " +
+            "AND status = '下午签退'")
+    int countAfternoonSignOff(
+            @Param("employeeId") String employeeId,
+            @Param("salaryDate") String salaryDate);
+    // 根据员工ID和薪资归属日期统计"加班签退"的次数
+    @Select("SELECT COUNT(*) FROM attendance_record " +
+            "WHERE employee_id = #{employeeId} " +
+            "AND DATE_FORMAT(date, '%Y-%m') = #{salaryDate} " +
+            "AND status = '加班签退'")
+    int countOvertimeSignOff(
+            @Param("employeeId") String employeeId,
+            @Param("salaryDate") String salaryDate);
+    // 根据员工ID和薪资归属日期统计迟到的次数（包括"早上迟到"和"下午迟到"）
+    @Select("SELECT COUNT(*) FROM attendance_record " +
+            "WHERE employee_id = #{employeeId} " +
+            "AND DATE_FORMAT(date, '%Y-%m') = #{salaryDate} " +
+            "AND status LIKE '%迟到%'")
+    int countLateTimes(
+            @Param("employeeId") String employeeId,
+            @Param("salaryDate") String salaryDate);
+
+
+
     // 查询考勤记录(根据员工ID和日期）
     @Select("SELECT * FROM attendance_record WHERE employee_id = #{employeeId} AND date = #{date}")
     List<AttendanceRecord> getAttRecByEmployeeIdAndDate(

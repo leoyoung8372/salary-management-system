@@ -21,4 +21,10 @@ public class AttendanceRecord {
     private String name;
     private String department;
     private String position;
+
+
+
+    private int workDays;       // 上班天数
+    private int overtimeDays;   // 加班天数
+    private int lateCount;      // 迟到次数
 }

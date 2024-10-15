@@ -60,6 +60,15 @@ public class AttRecController {
         }
     }
 
+    //根据员工工号和归属日期查找上班天数和加班天数
+    @GetMapping("/summary")
+    public ResponseEntity<AttendanceRecord> getAttendanceSummary(
+            @RequestParam String employeeId,
+            @RequestParam String salaryDate) {
+        AttendanceRecord summary = attRecService.calculateAttendanceSummary(employeeId, salaryDate);
+        return ResponseEntity.ok(summary);
+    }
+
     //根据员工ID和日期查询考勤记录
     @GetMapping("/records")
     public ResponseEntity<List<AttendanceRecord>> getAttendanceRecords(
