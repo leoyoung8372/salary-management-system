@@ -15,7 +15,7 @@ const router = createRouter({
     routes: [
         {  
             path: '/',  
-            redirect: '/CheckIn' // 添加默认路由 (默认显示) 
+            redirect: '/CheckIn' // 添加默认路由 (默认显示的页面) 
         }, 
 
         {
