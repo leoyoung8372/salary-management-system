@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div class="form-item">
-                    <button @click="submitSalary" class="submit-button" >提交</button>
+                    <button @click="submitSalary" class="submit-button">提交</button>
                 </div>
             </div>
 
@@ -97,7 +97,7 @@
                     <p>说明: </p>
                     <p>月基本工资 = 160元/天 × 22天 = 3520元</p>
                     <p>绩效 = 当加班天数 ≥ 5天且上班天数 ≥ 15天时，绩效奖200元;</p>
-                    <p>奖金 = 当上班天数 ≥ 22天时，奖金220元；小于22天则无奖金。</p>
+                    <p>奖金 = 当上班天数 ≥ 20天时，奖金220元；小于22天则无奖金。</p>
                     <p>扣除 = 迟到次数 × 5元;</p>
                     <p>加班费 = 60元/天 × 加班天数;</p>
                     <p>津贴 = 300元/月;</p>
@@ -271,44 +271,46 @@ async function submitSalary() {
 }
 
 // 获取考勤统计信息  
-async function getAttendanceSummary() {  
+async function getAttendanceSummary() {
     const yearMonth = searchSalaryDate.value; // 薪资归属日期  
     const empId = searchEmployeeId.value; // 员工工号  
 
-    if (!yearMonth || !empId) {  
-        showWarning("请填写员工工号和薪资归属日期！");  
-        return;  
-    }  
+    if (!yearMonth || !empId) {
+        showWarning("请填写员工工号和薪资归属日期！");
+        return;
+    }
 
-    try {  
-        const response = await axios.get(`http://localhost:8080/api/attendance/summary?employeeId=${empId}&salaryDate=${yearMonth}`);  
+    try {
+        const response = await axios.get(`http://localhost:8080/api/attendance/summary?employeeId=${empId}&salaryDate=${yearMonth}`);
         attendanceSummary.value = response.data; // 更新考勤统计信息   
 
         // 获取考勤信息  
-        const { workDays, overtimeDays, lateCount } = attendanceSummary.value;  
+        const { workDays, overtimeDays, lateCount } = attendanceSummary.value;
 
         // 计算各项薪资  
         const dailyWage = 160; // 每天薪资  
         const baseSalaryCalculated = workDays * dailyWage; // 基本工资 = 上班天数 × 每天薪资  
         const performanceCalculated = (overtimeDays >= 5 && workDays >= 15) ? 200 : 0; // 绩效奖  
         const allowanceCalculated = 300; // 津贴  
-        const bonusCalculated = (workDays >= 22) ? 220 : 0; // 奖金  
+        const bonusCalculated = (workDays >= 20) ? 220 : 0; // 奖金  
         const deductionCalculated = lateCount * 5; // 扣除 = 迟到次数 × 5 元  
+        const overtimepay = 60 * overtimeDays;
 
         // 填充到form-left类的输入框中  
-        baseSalary.value = baseSalaryCalculated;  
-        performanceSalary.value = performanceCalculated;  
-        allowance.value = allowanceCalculated;  
-        bonus.value = bonusCalculated;  
-        deduction.value = deductionCalculated;  
+        baseSalary.value = baseSalaryCalculated;
+        performanceSalary.value = performanceCalculated;
+        allowance.value = allowanceCalculated;
+        bonus.value = bonusCalculated;
+        deduction.value = deductionCalculated;
+        overtimePay.value = overtimepay;
 
         // 计算总的薪资  
         calculateTotalPayroll(); // 重新计算实发薪资  
 
-    } catch (error) {  
-        console.error("获取考勤统计信息失败:", error);  
-        showWarning("获取考勤统计信息失败，请检查工号或日期。");  
-    }  
+    } catch (error) {
+        console.error("获取考勤统计信息失败:", error);
+        showWarning("获取考勤统计信息失败，请检查工号或日期。");
+    }
 }
 
 // 重置表单  
@@ -556,11 +558,15 @@ function resetForm() {
     color: #333;
     /* 字体颜色 */
 }
-.show p:first-child {  
-    font-weight: bold; /* 说明引导文字加粗 */  
-    font-size: 18px; /* 为说明内容使用稍大的字体 */  
-    color: #38A169; /* 说明文字颜色，使用与其他元素一致的颜色 */  
-} 
+
+.show p:first-child {
+    font-weight: bold;
+    /* 说明引导文字加粗 */
+    font-size: 18px;
+    /* 为说明内容使用稍大的字体 */
+    color: #38A169;
+    /* 说明文字颜色，使用与其他元素一致的颜色 */
+}
 
 .show span {
     font-weight: bold;
@@ -568,23 +574,35 @@ function resetForm() {
     color: #38A169;
     /* 数字颜色 */
 }
-.explain {  
-    background-color: #f9f9f9; /* 背景颜色，淡灰色以区分不同部分 */  
-    padding: 15px; /* 内部填充 */  
-    border-radius: 4px; /* 圆角 */  
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 阴影效果，给部分深度感 */  
-    margin-top: 20px; /* 顶部间隔，防止内容重叠 */  
-}  
 
-.explain p {  
-    font-size: 16px; /* 字体大小 */  
-    margin: 5px 0; /* 每段之间的间距 */  
-    color: #333; /* 文字颜色 */  
-}  
+.explain {
+    background-color: #f9f9f9;
+    /* 背景颜色，淡灰色以区分不同部分 */
+    padding: 15px;
+    /* 内部填充 */
+    border-radius: 4px;
+    /* 圆角 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* 阴影效果，给部分深度感 */
+    margin-top: 20px;
+    /* 顶部间隔，防止内容重叠 */
+}
 
-.explain p:first-child {  
-    font-weight: bold; /* 说明引导文字加粗 */  
-    font-size: 18px; /* 为说明内容使用稍大的字体 */  
-    color: #38A169; /* 说明文字颜色，使用与其他元素一致的颜色 */  
-} 
+.explain p {
+    font-size: 16px;
+    /* 字体大小 */
+    margin: 5px 0;
+    /* 每段之间的间距 */
+    color: #333;
+    /* 文字颜色 */
+}
+
+.explain p:first-child {
+    font-weight: bold;
+    /* 说明引导文字加粗 */
+    font-size: 18px;
+    /* 为说明内容使用稍大的字体 */
+    color: #38A169;
+    /* 说明文字颜色，使用与其他元素一致的颜色 */
+}
 </style>

@@ -19,10 +19,7 @@
                 <img src="../../assets/EmployeeFile.png"class="icon" />
                 员工档案管理
             </router-link>
-            <router-link to="/salaryPaymentRecord" class="navbarItem">
-                <img src="../../assets/record.png">
-                薪资发放记录
-            </router-link>
+            
             <!-- <router-link to="/salaryItems" class="navbarItem">
                 <img src="../../assets/salaryItem.png"class="icon" />
                 薪资项
@@ -30,6 +27,10 @@
             <router-link to="/Payslip" class="navbarItem">
                 <img src="../../assets/salarypay.png"class="icon" />
                 员工薪资发放
+            </router-link>
+            <router-link to="/salaryPaymentRecord" class="navbarItem">
+                <img src="../../assets/record.png">
+                薪资发放记录
             </router-link>
             <!-- <router-link to="/problemFeedback" class="navbarItem">
                 <img src="../../assets/feedback.png"class="icon" />
